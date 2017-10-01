@@ -12,6 +12,20 @@ function render() {
 	renderer.render(scene, camera);
 }
 
+function addOranges() {
+	createOrange(63, 1, 0);
+	createOrange(57, 1, 20);
+	createOrange(-55, 1, -20);
+}
+
+function addButters() {
+	createButter(65, 1, 40);
+	createButter(53, 1, 0);
+	createButter(-55, 1, 42);
+	createButter(-64, 1, 37);
+	createButter(-55, 1, -30);
+}
+
 function addBorders() {
 	'use strict';
 	
@@ -32,10 +46,10 @@ function addBorders() {
 }
 
 function addWheels(x, y, z) {
-		createRing(x+4.3, y+1, z+1.5, "z");
-		createRing(x-3.4, y+1, z+1.5, "z");
-		createRing(x+4.3, y+1, z-1.5, "z");
-		createRing(x-3.4, y+1, z-1.5, "z");
+		createRing(x+4.85, y+1, z+1.5, "z");
+		createRing(x-3.6, y+1, z+1.5, "z");
+		createRing(x+4.85, y+1, z-1.5, "z");
+		createRing(x-3.6, y+1, z-1.5, "z");
 }
 
 function addCar(obj, x, y, z) {
@@ -87,6 +101,36 @@ function createCar(x, y, z) {
 	addWheels(x, y, z);
 }
 
+function createButter(x, y, z) {
+	'use strict';
+	
+	var butter = new THREE.Object3D();
+	
+	material = new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: false });
+	geometry = new THREE.CubeGeometry(1.5, 1.5, 5);
+	mesh = new THREE.Mesh(geometry, material);
+	
+	butter.add(mesh);
+	butter.position.set(x, y, z);
+	
+	scene.add(butter);
+}
+
+function createOrange(x, y, z) {
+	'use strict';
+	
+	var orange = new THREE.Object3D();
+	
+	material = new THREE.MeshBasicMaterial({ color: 0xffa500, wireframe: false });
+	geometry = new THREE.SphereGeometry(1.5, 10, 10);
+	mesh = new THREE.Mesh(geometry, material);
+	
+	orange.add(mesh);
+	orange.position.set(x, y, z);
+	
+	scene.add(orange);
+}
+
 function createRing(x, y, z, flag) {
 	'use strict';
 	
@@ -104,21 +148,6 @@ function createRing(x, y, z, flag) {
 		ring.rotateY(1.5);
 		ring.rotateX(0.55);
 	}
-	scene.add(ring);
-}
-
-function createRingY(x, y, z) {
-	'use strict';
-	
-	ring = new THREE.Object3D();
-	
-	material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: false});
-	geometry = new THREE.TorusGeometry(1, 0.4, 10, 50);
-	mesh = new THREE.Mesh(geometry, material);
-	
-	ring.add(mesh);
-	ring.position.set(x, y, z);
-	
 	scene.add(ring);
 }
 
@@ -140,6 +169,8 @@ function createScene() {
 	
 	createTable(0, 0, 0);
 	createCar(-63, 0, 0);
+	addOranges();
+	addButters();
 }
 
 function init() {
