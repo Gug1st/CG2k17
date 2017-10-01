@@ -4,14 +4,6 @@ var camera, scene, renderer;
 
 var geometry, material, mesh;
 
-var ring;
-
-function render() {
-	'use strict';
-	
-	renderer.render(scene, camera);
-}
-
 function addOranges() {
 	createOrange(63, 1, 0);
 	createOrange(57, 1, 20);
@@ -77,7 +69,7 @@ function createTable(x, y, z) {
 	
 	var table = new THREE.Object3D();
 	
-	material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: false });
+	material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 	
 	addTable(table, x, y, z);
 	
@@ -92,7 +84,7 @@ function createCar(x, y, z) {
 	
 	var car = new THREE.Object3D();
 	
-	material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false });
+	material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 	
 	addCar(car, x, y, z);
 	
@@ -106,7 +98,7 @@ function createButter(x, y, z) {
 	
 	var butter = new THREE.Object3D();
 	
-	material = new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: false });
+	material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 	geometry = new THREE.CubeGeometry(1.5, 1.5, 5);
 	mesh = new THREE.Mesh(geometry, material);
 	
@@ -121,7 +113,7 @@ function createOrange(x, y, z) {
 	
 	var orange = new THREE.Object3D();
 	
-	material = new THREE.MeshBasicMaterial({ color: 0xffa500, wireframe: false });
+	material = new THREE.MeshBasicMaterial({ color: 0xffa500 });
 	geometry = new THREE.SphereGeometry(1.5, 10, 10);
 	mesh = new THREE.Mesh(geometry, material);
 	
@@ -134,9 +126,9 @@ function createOrange(x, y, z) {
 function createRing(x, y, z, flag) {
 	'use strict';
 	
-	ring = new THREE.Object3D();
+	var ring = new THREE.Object3D();
 	
-	material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: false});
+	material = new THREE.MeshBasicMaterial({ color: 0x000000 });
 	geometry = new THREE.TorusGeometry(1, 0.4, 10, 50);
 	mesh = new THREE.Mesh(geometry, material);
 	
@@ -173,6 +165,45 @@ function createScene() {
 	addButters();
 }
 
+function render() {
+	'use strict';
+	
+	renderer.render(scene, camera);
+}
+
+function onResize() {
+	'use strict';
+	
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	
+	if (window.innerHeight > 0 && window.innerWidth > 0) {
+		camera.aspect = renderer.getSize().width / renderer.getSize().height;
+		camera.updateProjectionMatrix();
+	}
+	
+	render();
+}
+
+function onKeyDown(e) {
+	'use strict';
+	
+	switch (e.keyCode) {
+	case 65: //A
+	case 97: //a
+		scene.traverse(function (node) {
+			if (node instanceof THREE.Mesh) {
+				node.material.wireframe = !node.material.wireframe;
+			}
+		});
+		break;
+	case 83: //S
+	case 115: //s
+		break;
+	}
+	
+	render();
+}
+
 function init() {
 	'use strict';
 	
@@ -184,4 +215,7 @@ function init() {
 	createCamera();
 	
 	render();
+	
+	window.addEventListener("resize", onResize);
+	window.addEventListener("keydown", onKeyDown);
 }
