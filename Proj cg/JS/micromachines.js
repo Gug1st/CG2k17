@@ -15,11 +15,11 @@ function render() {
 function addBorders(obj, x, y, z) {
 	'use strict';
 	
-	for(var i=0; i< 23; i++) {
-		createRing(49.5-i*4.5, 0, 55);
-		createRing(49.5-i*4.5, 0, -55);
-		createRing(50, 0, 55-i*5);
-		createRing(-50, 0, 55-i*5);
+	for(var i=0; i< 21; i++) {
+		createRing(48-i*4.5, 0, 53);
+		createRing(47.5-i*4.8, 0, -52.5);
+		createRing(48, 0, 53-i*5);
+		createRing(-48, 0, 53-i*5);
 	}
 	
 	for(i=0; i<29; i++) {
@@ -72,12 +72,13 @@ function createRing(x, y, z) {
 	
 	ring = new THREE.Object3D();
 	
-	material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false});
-	geometry = new THREE.TorusGeometry(1, 1, 10);
+	material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: false});
+	geometry = new THREE.TorusGeometry(1, 0.4, 10, 50);
 	mesh = new THREE.Mesh(geometry, material);
 	
 	ring.add(mesh);
 	ring.position.set(x, y, z);
+	ring.rotateX(1.3);
 	
 	scene.add(ring);
 }
@@ -86,7 +87,7 @@ function createCamera() {
 	'use strict';
 	
 	camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 1, 1000);
-	camera.position.x = 30;
+	camera.position.x = 0;
 	camera.position.y = 70;
 	camera.position.z = 0;
 	camera.lookAt(scene.position);
