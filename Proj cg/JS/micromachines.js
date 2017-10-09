@@ -16,7 +16,7 @@ function addOranges() {
 }
 
 function addButters() {
-	createButter(65, -0.5, 40);
+	createButter(65, - 0.5, 40);
 	createButter(53, -0.5, 0);
 	createButter(-55, -0.5, 42);
 	createButter(-64, -0.5, 37);
