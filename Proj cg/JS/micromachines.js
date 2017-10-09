@@ -5,6 +5,10 @@ var camera, scene, renderer;
 var car;
 var geometry, material, mesh;
 
+var aspect = window.innerWidth / window.innerHeight;
+
+var frustumSize = 1000;
+
 function addOranges() {
 	createOrange(63, 1, 0);
 	createOrange(57, 1, 20);
@@ -148,10 +152,8 @@ function createRing(x, y, z, flag) {
 function createCamera() {
 	'use strict';
 	
-	camera = new THREE.OrthographicCamera( window.innerWidth / - 10, window.innerWidth / 10, window.innerHeight / 10, window.innerHeight / - 10, 1, 1000 );
-	camera.position.x = 0;
-	camera.position.y = 70;
-	camera.position.z = 0;
+	camera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 1, 2000 );
+	camera.position.y = 400;
 	camera.lookAt(scene.position);
 }
 
@@ -194,11 +196,10 @@ function onResize() {
 	'use strict';
 	
 	var aspect = window.innerWidth / window.innerHeight;
-	
-				camera.left   = - 185 * aspect / 2;
-				camera.right  =   185 * aspect / 2;
-				camera.top    =   185 / 2;
-				camera.bottom = - 185 / 2;
+				camera.left   = - frustumSize * aspect / 2;
+				camera.right  =   frustumSize * aspect / 2;
+				camera.top    =   frustumSize / 2;
+				camera.bottom = - frustumSize / 2;
 				camera.updateProjectionMatrix();
 				renderer.setSize( window.innerWidth, window.innerHeight );
 }
