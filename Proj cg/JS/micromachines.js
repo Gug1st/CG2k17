@@ -152,7 +152,7 @@ function createRing(x, y, z, flag) {
 function createCamera() {
 	'use strict';
 	
-	camera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 1, 2000 );
+	camera = new THREE.OrthographicCamera( frustumSize * aspect / - 10, frustumSize * aspect / 10, frustumSize / 10, frustumSize / - 10, 1, 2000 );
 	camera.position.y = 400;
 	camera.lookAt(scene.position);
 }
@@ -195,11 +195,11 @@ function animate() {
 function onResize() {
 	'use strict';
 	
-	var aspect = window.innerWidth / window.innerHeight;
-				camera.left   = - frustumSize * aspect / 2;
-				camera.right  =   frustumSize * aspect / 2;
-				camera.top    =   frustumSize / 2;
-				camera.bottom = - frustumSize / 2;
+	aspect = window.innerWidth / window.innerHeight;
+				camera.left   = - frustumSize * aspect / 10;
+				camera.right  =   frustumSize * aspect / 10;
+				camera.top    =   frustumSize / 10;
+				camera.bottom = - frustumSize / 10;
 				camera.updateProjectionMatrix();
 				renderer.setSize( window.innerWidth, window.innerHeight );
 }
