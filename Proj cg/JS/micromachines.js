@@ -5,9 +5,12 @@ var geometry, material, mesh;
 
 var aspect = window.innerWidth / window.innerHeight;
 
-var clock;
+var clock, delta;
 
 var frustumSize = 1000;
+var maxVel = 0.5;
+var oldVel = 0;
+var currentVel = 0;
 
 function addOranges() {
 	createOrange(63, 1, 0);
@@ -51,7 +54,6 @@ function addWheel(obj, x, y, z) {
 	mesh.position.set(x, y, z);
 	mesh.rotateY(1.5);
 	mesh.rotateX(0.55);
-	
 	obj.add(mesh);
 }
 
@@ -61,7 +63,6 @@ function addCar(obj, x, y, z) {
 	geometry = new THREE.CubeGeometry(5, 1, 7);
 	mesh = new THREE.Mesh(geometry, material);
 	mesh.position.set(x, y, z);
-	
 	obj.add(mesh);
 }
 
@@ -71,7 +72,6 @@ function addTable(obj, x, y, z) {
 	geometry = new THREE.CubeGeometry(150, 0, 150);
 	mesh = new THREE.Mesh(geometry, material);
 	mesh.position.set(x, y, z);
-	
 	obj.add(mesh);
 }
 
@@ -79,13 +79,9 @@ function createTable(x, y, z) {
 	'use strict';
 	
 	var table = new THREE.Object3D();
-	
 	material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-	
 	addTable(table, x, y, z);
-	
 	scene.add(table);
-	
 	addBorders();
 	
 }
@@ -95,16 +91,12 @@ function createCar(x, y, z) {
 	
 	car = new THREE.Object3D();
 	car.userData = { moving: false, type: "" };
-	
 	material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-	
 	addCar(car, x, y, z);
-	
 	addWheel(car, x+3, y+1, z+1.5);
 	addWheel(car, x-3, y+1, z+1.5);
 	addWheel(car, x+3, y+1, z-1.5);
 	addWheel(car, x-3, y+1, z-1.5);
-	
 	scene.add(car);
 
 }
@@ -113,14 +105,11 @@ function createButter(x, y, z) {
 	'use strict';
 	
 	var butter = new THREE.Object3D();
-	
 	material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 	geometry = new THREE.CubeGeometry(1.5, 1.5, 5);
 	mesh = new THREE.Mesh(geometry, material);
-	
 	butter.add(mesh);
 	butter.position.set(x, y, z);
-	
 	scene.add(butter);
 }
 
@@ -128,14 +117,11 @@ function createOrange(x, y, z) {
 	'use strict';
 	
 	var orange = new THREE.Object3D();
-	
 	material = new THREE.MeshBasicMaterial({ color: 0xffa500 });
 	geometry = new THREE.SphereGeometry(1.5, 10, 10);
 	mesh = new THREE.Mesh(geometry, material);
-	
 	orange.add(mesh);
 	orange.position.set(x, y, z);
-	
 	scene.add(orange);
 }
 
@@ -143,13 +129,12 @@ function createRing(x, y, z, flag) {
 	'use strict';
 	
 	var ring = new THREE.Object3D();
-	
 	material = new THREE.MeshBasicMaterial({ color: 0x000000 });
 	geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
 	mesh = new THREE.Mesh(geometry, material);
-	
 	ring.add(mesh);
 	ring.position.set(x, y, z);
+
 	if (flag == "x") {
 		ring.rotateX(1.4);
 	} else if (flag == "z") {
@@ -171,9 +156,9 @@ function createScene() {
 	'use strict';
 	
 	scene = new THREE.Scene();
-	
 	createTable(0, 0, 0);
-	createCar(-63, 0, 0);
+	createCar(0, 0, 0);
+	car.position.set(61,0,37);
 	addOranges();
 	addButters();
 }
@@ -186,14 +171,32 @@ function render() {
 
 function animate() {
 	'use strict';
+
+	delta = clock.getDelta();
 	
 	if (car.userData.moving == true) {
-		if (car.userData.type == "f")
-			car.translateZ( 0.5 );
-		if (car.userData.type == "b")
-			car.translateZ( -0.5);
-		else 
-			car.translateZ(0);
+		if (oldVel <= maxVel){
+			currentVel = oldVel + 0.2 * delta;
+			oldVel = currentVel;
+		} else {
+			currentVel = maxVel;
+			oldVel = maxVel;
+		}
+	} else {
+		if (currentVel > 0){
+			currentVel = currentVel - delta * 0.2;
+			oldVel = currentVel;
+		} else { 
+			oldVel = 0;
+			currentVel = 0;
+		}
+	}
+
+	if (car.userData.type == "f"){
+		car.translateZ( - currentVel );
+	} else if (car.userData.type == "b"){
+		currentVel /= 2;
+		car.translateZ( currentVel / 2 );
 	}
 	render();
 	requestAnimationFrame(animate);
@@ -202,19 +205,20 @@ function animate() {
 function onResize() {
 	'use strict';
 	
-				aspect = window.innerWidth / window.innerHeight;
-				camera.left   = - frustumSize * aspect / 10;
-				camera.right  =   frustumSize * aspect / 10;
-				camera.top    =   frustumSize / 10;
-				camera.bottom = - frustumSize / 10;
-				camera.updateProjectionMatrix();
-				renderer.setSize( window.innerWidth, window.innerHeight );
+	aspect = window.innerWidth / window.innerHeight;
+	camera.left   = - frustumSize * aspect / 10;
+	camera.right  =   frustumSize * aspect / 10;
+	camera.top    =   frustumSize / 10;
+	camera.bottom = - frustumSize / 10;
+	camera.updateProjectionMatrix();
+	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
 function onKeyDown(e) {
 	'use strict';
 	
 	switch (e.keyCode) {
+
 	case 65: //A
 	case 97: //a
 		scene.traverse(function (node) {
@@ -223,17 +227,27 @@ function onKeyDown(e) {
 			}
 		});
 		break;
-		
-	case 87: //W
-	case 119: //w
+
+	case 38: //Arrow Up
 		car.userData.moving = true;
 		car.userData.type = "f";
 		break;
-	case 83: //S
-	case 115: //s
+		
+	case 39: //Arrow Up
 		car.userData.moving = true;
-		car.userData.type = "b";
+		car.userData.type = "f";
 		break;
+
+	case 40: //Arrow Down
+		car.userData.rotate = true;
+		car.userData.type = "r";
+		break;
+		
+	case 41: //Arrow Up
+		car.userData.rotate = true;
+		car.userData.type = "l";
+		break;
+	
 	}
 	render();
 }
@@ -241,12 +255,9 @@ function onKeyDown(e) {
 function onKeyUp(e) {
 	'use strict';
 	switch (e.keyCode) {
-	case 87: //W
-	case 119: //w
-	case 83: //S
-	case 115: //s
+	case 38://Arrow Up
+	case 40://Arrow Down
 		car.userData.moving = false;
-		car.userData.type = "";
 		break;
 	}
 	
