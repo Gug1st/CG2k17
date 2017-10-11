@@ -195,7 +195,6 @@ function animate() {
 	if (car.userData.type == "f"){
 		car.translateZ( - currentVel );
 	} else if (car.userData.type == "b"){
-		currentVel /= 2;
 		car.translateZ( currentVel / 2 );
 	}
 	render();
@@ -232,23 +231,13 @@ function onKeyDown(e) {
 		car.userData.moving = true;
 		car.userData.type = "f";
 		break;
-		
-	case 39: //Arrow Up
-		car.userData.moving = true;
-		car.userData.type = "f";
-		break;
 
 	case 40: //Arrow Down
-		car.userData.rotate = true;
-		car.userData.type = "r";
+		car.userData.moving = true;
+		car.userData.type = "b";
 		break;
-		
-	case 41: //Arrow Up
-		car.userData.rotate = true;
-		car.userData.type = "l";
-		break;
-	
 	}
+
 	render();
 }
 
