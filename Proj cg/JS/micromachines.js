@@ -45,12 +45,22 @@ function addBorders() {
 function addWheel(obj, x, y, z) {
 	'use strict';
 	
-	material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+	material = new THREE.MeshBasicMaterial({ color: 0x696969 });
 	geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
 	mesh = new THREE.Mesh(geometry, material);
 	mesh.position.set(x, y, z);
 	mesh.rotateY(1.5);
 	mesh.rotateX(0.55);
+	obj.add(mesh);
+}
+
+function addLight(obj, x, y, z){
+	'use strict';
+	
+	geometry = new THREE.SphereGeometry(0.5,32,32);
+	material = new THREE.MeshBasicMaterial({ color: 0xFFFF00 });
+	mesh = new THREE.Mesh(geometry, material);
+	mesh.position.set(x, y, z);
 	obj.add(mesh);
 }
 
@@ -90,10 +100,15 @@ function createCar(x, y, z) {
 	car.userData = { maxVel: 0.5, currentVel: 0, consVel: 0.2 };
 	material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 	addCar(car, x, y, z);
+
 	addWheel(car, x+3, y+1, z+1.5);
 	addWheel(car, x-3, y+1, z+1.5);
 	addWheel(car, x+3, y+1, z-1.5);
 	addWheel(car, x-3, y+1, z-1.5);
+
+	addLight(car, x-1.5, y+1, z-2.5);
+	addLight(car, x+1.5, y+1, z-2.5);
+
 	scene.add(car);
 
 }
@@ -181,8 +196,8 @@ function animate() {
 		}
 	} else {
 		if (moveCar.currentVel > 0){
-			moveCar.currentVel -= + delta * moveCar.consVel;
-		} else { 
+			moveCar.currentVel -= delta * moveCar.consVel;
+		} else {
 			moveCar.currentVel = 0;
 		}
 	}
