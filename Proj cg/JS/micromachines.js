@@ -46,7 +46,7 @@ function addBorders() {
 function addWheel(obj, x, y, z) {
 	'use strict';
 	
-	material = new THREE.MeshBasicMaterial({ color: 0x696969 });
+	material = new THREE.MeshBasicMaterial({ color: 0x000000 });
 	geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
 	mesh = new THREE.Mesh(geometry, material);
 	mesh.position.set(x, y, z);
@@ -87,7 +87,7 @@ function createTable(x, y, z) {
 	'use strict';
 	
 	var table = new THREE.Object3D();
-	material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+	material = new THREE.MeshBasicMaterial({ color: 0x00cc66 });
 	addTable(table, x, y, z);
 	scene.add(table);
 	addBorders();
@@ -127,7 +127,7 @@ function createOrange(x, y, z) {
 	'use strict';
 	
 	var orange = new THREE.Object3D();
-	material = new THREE.MeshBasicMaterial({ color: 0xffa500 });
+	material = new THREE.MeshBasicMaterial({ wireframe: false, color: 0xffa500 });
 	geometry = new THREE.SphereGeometry(2, 10, 10);
 	mesh = new THREE.Mesh(geometry, material);
 	orange.add(mesh);
@@ -166,6 +166,7 @@ function createScene() {
 	'use strict';
 	
 	scene = new THREE.Scene();
+	scene.background = new THREE.Color(0x003300);
 	createTable(0, 0, 0);
 	createCar(0, 0, 0);
 	car.position.set(61, 1, 37);
