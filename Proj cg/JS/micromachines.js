@@ -8,6 +8,7 @@ var aspect = window.innerWidth / window.innerHeight;
 var clock, delta;
 var map = {37: false, 38: false, 39: false, 40: false};
 var frustumSize = 1000;
+var lastPressed;
 
 function addOranges() {
 	createOrange(63, -1, 0);
@@ -100,15 +101,12 @@ function createCar(x, y, z) {
 	car.userData = { maxVel: 0.5, currentVel: 0, consVel: 0.2 };
 	material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 	addCar(car, x, y, z);
-
 	addWheel(car, x+3, y+1, z+1.5);
 	addWheel(car, x-3, y+1, z+1.5);
 	addWheel(car, x+3, y+1, z-1.5);
 	addWheel(car, x-3, y+1, z-1.5);
-
 	addLight(car, x-1.5, y+1, z-2.5);
 	addLight(car, x+1.5, y+1, z-2.5);
-
 	scene.add(car);
 
 }
@@ -194,10 +192,14 @@ function animate() {
 		} else {
 			moveCar.currentVel = moveCar.maxVel;
 		}
-	} else {
-		if (moveCar.currentVel > 0){
-			moveCar.currentVel -= delta * moveCar.consVel;
-		} else {
+	} else if (!map[40] || !map[38]) {
+		if (moveCar.currentVel > 0) {
+			moveCar.currentVel -= delta * moveCar.consVel + 0.001;
+			if (lastPressed == "f")
+				car.translateZ( - moveCar.currentVel );
+			else if (lastPressed == "b")
+				car.translateZ( moveCar.currentVel );
+		} else { 
 			moveCar.currentVel = 0;
 		}
 	}
@@ -280,6 +282,7 @@ function onKeyUp(e) {
 		
 	case 38: //Arrow Up
 		map[e.keyCode] = false;
+		lastPressed = "f";
 		break;
 		
 	case 39: //Arrow Right
@@ -288,6 +291,7 @@ function onKeyUp(e) {
 		
 	case 40: //Arrow Down
 		map[e.keyCode] = false;
+		lastPressed = "b";
 		break;	
 	
 	}
