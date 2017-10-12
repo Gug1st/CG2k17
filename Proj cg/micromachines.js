@@ -6,16 +6,13 @@ var geometry, material, mesh;
 var aspect = window.innerWidth / window.innerHeight;
 
 var clock, delta;
-
+var map = {37: false, 38: false, 39: false, 40: false};
 var frustumSize = 1000;
-var maxVel = 0.5;
-var currentVel = 0;
-var consVel = 0.2;
 
 function addOranges() {
-	createOrange(63, 1, 0);
-	createOrange(57, 1, 20);
-	createOrange(-55, 1, -20);
+	createOrange(63, -1, 0);
+	createOrange(57, -1, 20);
+	createOrange(-55, -1, -20);
 }
 
 function addButters() {
@@ -90,7 +87,7 @@ function createCar(x, y, z) {
 	'use strict';
 	
 	car = new THREE.Object3D();
-	car.userData = { rotate: false, moving: false, type: "" };
+	car.userData = { maxVel: 0.5, currentVel: 0, consVel: 0.2 };
 	material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 	addCar(car, x, y, z);
 	addWheel(car, x+3, y+1, z+1.5);
@@ -106,7 +103,7 @@ function createButter(x, y, z) {
 	
 	var butter = new THREE.Object3D();
 	material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-	geometry = new THREE.CubeGeometry(1.5, 1.5, 5);
+	geometry = new THREE.CubeGeometry(3, 1.5, 6);
 	mesh = new THREE.Mesh(geometry, material);
 	butter.add(mesh);
 	butter.position.set(x, y, z);
@@ -118,7 +115,7 @@ function createOrange(x, y, z) {
 	
 	var orange = new THREE.Object3D();
 	material = new THREE.MeshBasicMaterial({ color: 0xffa500 });
-	geometry = new THREE.SphereGeometry(1.5, 10, 10);
+	geometry = new THREE.SphereGeometry(2, 10, 10);
 	mesh = new THREE.Mesh(geometry, material);
 	orange.add(mesh);
 	orange.position.set(x, y, z);
@@ -158,7 +155,7 @@ function createScene() {
 	scene = new THREE.Scene();
 	createTable(0, 0, 0);
 	createCar(0, 0, 0);
-	car.position.set(61, 0, 37);
+	car.position.set(61, 1, 37);
 	addOranges();
 	addButters();
 }
@@ -173,36 +170,41 @@ function animate() {
 	'use strict';
 
 	delta = clock.getDelta();
+	var moveCar = car.userData;
+	var yAxis = new THREE.Vector3(0, 1, 0);
 	
-	if (car.userData.moving == true) {
-		if (currentVel <= maxVel){
-			currentVel += delta * consVel;
+	if (map[40] || map[38]) {
+		if (moveCar.currentVel <= moveCar.maxVel){
+			moveCar.currentVel += delta * moveCar.consVel;
 		} else {
-			currentVel = maxVel;
+			moveCar.currentVel = moveCar.maxVel;
 		}
 	} else {
-		if (currentVel > 0){
-			currentVel -= + delta * consVel;
+		if (moveCar.currentVel > 0){
+			moveCar.currentVel -= + delta * moveCar.consVel;
 		} else { 
-			currentVel = 0;
+			moveCar.currentVel = 0;
 		}
 	}
 
-	if (car.userData.type == "f"){
-		car.translateZ( - currentVel );
-	} else if (car.userData.type == "b"){
-		if (currentVel >= maxVel / 2)
-			currentVel = maxVel / 2;
-		car.translateZ( currentVel );
-	}
-	if (car.userData.rotating == true) {
-		if (car.userData.type == "r") {
-			var yAxis = new THREE.Vector3(0, 1, 0);
-			car.rotateOnAxis(yAxis, -0.09);
-		} else if (car.userData.type == "l") {
-			var yAxis = new THREE.Vector3(0, 1, 0);
-			car.rotateOnAxis(yAxis, 0.09);
-		}
+	if (map[38]){
+		if (map[37])
+			car.rotateOnAxis(yAxis, 0.05);
+		if (map[39])
+			car.rotateOnAxis(yAxis, -0.05);
+		car.translateZ( - moveCar.currentVel );
+	} else if (map[40]) {
+		if (map[37])
+			car.rotateOnAxis(yAxis, 0.05);
+		if (map[39])
+			car.rotateOnAxis(yAxis, -0.05);
+		if (moveCar.currentVel >= moveCar.maxVel / 2)
+			moveCar.currentVel = moveCar.maxVel / 2;
+		car.translateZ( moveCar.currentVel );
+	} else if (map[39]) {
+		car.rotateOnAxis(yAxis, -0.07);
+	} else if (map[37]) {
+		car.rotateOnAxis(yAxis, 0.07);
 	}
 	render();
 	requestAnimationFrame(animate);
@@ -224,7 +226,7 @@ function onKeyDown(e) {
 	'use strict';
 	
 	switch (e.keyCode) {
-
+	
 	case 65: //A
 	case 97: //a
 		scene.traverse(function (node) {
@@ -235,23 +237,19 @@ function onKeyDown(e) {
 		break;
 
 	case 37: //Arrow Left
-		car.userData.type = "l";
-		car.userData.rotating = true;
+		map[e.keyCode] = true;
 		break;
 	
 	case 38: //Arrow Up
-		car.userData.moving = true;
-		car.userData.type = "f";
+		map[e.keyCode] = true;
 		break;
 	
 	case 39: //Arrow Right
-		car.userData.rotating = true;
-		car.userData.type = "r";
+		map[e.keyCode] = true;
 		break;
 
 	case 40: //Arrow Down
-		car.userData.moving = true;
-		car.userData.type = "b";
+		map[e.keyCode] = true;
 		break;
 	}
 	render();
@@ -261,15 +259,22 @@ function onKeyUp(e) {
 	'use strict';
 	switch (e.keyCode) {
 		
+	case 37: //Arrow Left
+		map[e.keyCode] = false;
+		break;	
+		
 	case 38: //Arrow Up
-	case 40: //Arrow Down
-		car.userData.moving = false;
+		map[e.keyCode] = false;
 		break;
 		
-	case 37: //Arrow Left
 	case 39: //Arrow Right
-		car.userData.rotating = false;
-		break;
+		map[e.keyCode] = false;
+		break;	
+		
+	case 40: //Arrow Down
+		map[e.keyCode] = false;
+		break;	
+	
 	}
 	render();
 }
