@@ -98,7 +98,7 @@ function createCar(x, y, z) {
 	'use strict';
 	
 	car = new THREE.Object3D();
-	car.userData = { maxVel: 0.5, currentVel: 0, consVel: 0.2 };
+	car.userData = { maxVel: 0.5, currentVel: 0, consVel: 0.2, pedalSwitch: 0.1 };
 	material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 	addCar(car, x, y, z);
 	addWheel(car, x+3, y+1, z+1.5);
@@ -180,12 +180,11 @@ function render() {
 	renderer.render(scene, camera);
 }
 
-function animate() {
+function calcVelocity() {
 	'use strict';
-
+	
 	delta = clock.getDelta();
 	var moveCar = car.userData;
-	var yAxis = new THREE.Vector3(0, 1, 0);
 	
 	if (map[40] || map[38]) {
 		if (moveCar.currentVel <= moveCar.maxVel){
@@ -204,12 +203,25 @@ function animate() {
 			moveCar.currentVel = 0;
 		}
 	}
+}
 
+function movement() {
+	'use strict';
+	
+	var moveCar = car.userData;
+	var yAxis = new THREE.Vector3(0, 1, 0);
+	
 	if (map[38]){
 		if (map[37])
 			car.rotateOnAxis(yAxis, 0.05);
 		if (map[39])
 			car.rotateOnAxis(yAxis, -0.05);
+		if (lastPressed == "b") {
+			if (moveCar.currentVel - moveCar.currentVel < 0)
+				moveCar.currentVel = 0;
+			lastPressed = "";
+			moveCar.currentVel -= moveCar.pedalSwitch;
+		}
 		car.translateZ( - moveCar.currentVel );
 	} else if (map[40]) {
 		if (map[37])
@@ -218,12 +230,26 @@ function animate() {
 			car.rotateOnAxis(yAxis, -0.05);
 		if (moveCar.currentVel >= moveCar.maxVel / 2)
 			moveCar.currentVel = moveCar.maxVel / 2;
+		if (lastPressed == "f") {
+			if (moveCar.currentVel - moveCar.currentVel < 0)
+				moveCar.currentVel = 0;
+			lastPressed = "";
+			moveCar.currentVel -= moveCar.pedalSwitch;
+		}
 		car.translateZ( moveCar.currentVel );
 	} else if (map[39]) {
 		car.rotateOnAxis(yAxis, -0.07);
 	} else if (map[37]) {
 		car.rotateOnAxis(yAxis, 0.07);
 	}
+}
+	
+
+function animate() {
+	'use strict';
+
+	calcVelocity();
+	movement();
 	render();
 	requestAnimationFrame(animate);
 }
