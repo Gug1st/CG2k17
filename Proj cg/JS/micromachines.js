@@ -43,37 +43,6 @@ function addBorders() {
 
 }
 
-function addWheel(obj, x, y, z) {
-	'use strict';
-	
-	material = new THREE.MeshBasicMaterial({ color: 0x000000 });
-	geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
-	mesh = new THREE.Mesh(geometry, material);
-	mesh.position.set(x, y, z);
-	mesh.rotateY(1.5);
-	mesh.rotateX(0.55);
-	obj.add(mesh);
-}
-
-function addLight(obj, x, y, z){
-	'use strict';
-	
-	geometry = new THREE.SphereGeometry(0.5,32,32);
-	material = new THREE.MeshBasicMaterial({ color: 0xFFFF00 });
-	mesh = new THREE.Mesh(geometry, material);
-	mesh.position.set(x, y, z);
-	obj.add(mesh);
-}
-
-function addCar(obj, x, y, z) {
-	'use strict';
-	
-	geometry = new THREE.CubeGeometry(5, 1, 7);
-	mesh = new THREE.Mesh(geometry, material);
-	mesh.position.set(x, y, z);
-	obj.add(mesh);
-}
-
 function addTable(obj, x, y, z) {
 	'use strict';
 	
@@ -92,23 +61,6 @@ function createTable(x, y, z) {
 	scene.add(table);
 	addBorders();
 	
-}
-
-function createCar(x, y, z) {
-	'use strict';
-	
-	car = new THREE.Object3D();
-	car.userData = { maxVel: 0.5, currentVel: 0, consVel: 0.2, pedalSwitch: 0.1 };
-	material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-	addCar(car, x, y, z);
-	addWheel(car, x+3, y+1, z+1.5);
-	addWheel(car, x-3, y+1, z+1.5);
-	addWheel(car, x+3, y+1, z-1.5);
-	addWheel(car, x-3, y+1, z-1.5);
-	addLight(car, x-1.5, y+1, z-2.5);
-	addLight(car, x+1.5, y+1, z-2.5);
-	scene.add(car);
-
 }
 
 function createButter(x, y, z) {
@@ -168,8 +120,9 @@ function createScene() {
 	scene = new THREE.Scene();
 	scene.background = new THREE.Color(0x003300);
 	createTable(0, 0, 0);
-	createCar(0, 0, 0);
-	car.position.set(61, 1, 37);
+	car = new vehicle();
+	createCar(car, 0, 0, 0);
+	changePosition(car, 61, 1, 37);
 	addOranges();
 	addButters();
 }
@@ -178,78 +131,13 @@ function render() {
 	'use strict';
 	
 	renderer.render(scene, camera);
-}
-
-function calcVelocity() {
-	'use strict';
-	
-	delta = clock.getDelta();
-	var moveCar = car.userData;
-	
-	if (map[40] || map[38]) {
-		if (moveCar.currentVel <= moveCar.maxVel){
-			moveCar.currentVel += delta * moveCar.consVel;
-		} else {
-			moveCar.currentVel = moveCar.maxVel;
-		}
-	} else if (!map[40] || !map[38]) {
-		if (moveCar.currentVel > 0) {
-			moveCar.currentVel -= delta * moveCar.consVel + 0.001;
-			if (lastPressed == "f")
-				car.translateZ( - moveCar.currentVel );
-			else if (lastPressed == "b")
-				car.translateZ( moveCar.currentVel );
-		} else { 
-			moveCar.currentVel = 0;
-		}
-	}
-}
-
-function movement() {
-	'use strict';
-	
-	var moveCar = car.userData;
-	var yAxis = new THREE.Vector3(0, 1, 0);
-	
-	if (map[38]){
-		if (map[37])
-			car.rotateOnAxis(yAxis, 0.05);
-		if (map[39])
-			car.rotateOnAxis(yAxis, -0.05);
-		if (lastPressed == "b") {
-			if (moveCar.currentVel - moveCar.currentVel < 0)
-				moveCar.currentVel = 0;
-			lastPressed = "";
-			moveCar.currentVel -= moveCar.pedalSwitch;
-		}
-		car.translateZ( - moveCar.currentVel );
-	} else if (map[40]) {
-		if (map[37])
-			car.rotateOnAxis(yAxis, 0.05);
-		if (map[39])
-			car.rotateOnAxis(yAxis, -0.05);
-		if (moveCar.currentVel >= moveCar.maxVel / 2)
-			moveCar.currentVel = moveCar.maxVel / 2;
-		if (lastPressed == "f") {
-			if (moveCar.currentVel - moveCar.currentVel < 0)
-				moveCar.currentVel = 0;
-			lastPressed = "";
-			moveCar.currentVel -= moveCar.pedalSwitch;
-		}
-		car.translateZ( moveCar.currentVel );
-	} else if (map[39]) {
-		car.rotateOnAxis(yAxis, -0.07);
-	} else if (map[37]) {
-		car.rotateOnAxis(yAxis, 0.07);
-	}
-}
-	
+}	
 
 function animate() {
 	'use strict';
 
-	calcVelocity();
-	movement();
+	calcVelocity(car);
+	movement(car);
 	render();
 	requestAnimationFrame(animate);
 }
@@ -309,7 +197,7 @@ function onKeyUp(e) {
 		
 	case 38: //Arrow Up
 		map[e.keyCode] = false;
-		lastPressed = "f";
+		car.lastPressed = "f";
 		break;
 		
 	case 39: //Arrow Right
@@ -318,7 +206,7 @@ function onKeyUp(e) {
 		
 	case 40: //Arrow Down
 		map[e.keyCode] = false;
-		lastPressed = "b";
+		car.lastPressed = "b";
 		break;	
 	
 	}
