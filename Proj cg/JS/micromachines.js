@@ -28,17 +28,17 @@ function addBorders() {
 	'use strict';
 	
 	for(var i=0; i< 21; i++) {
-		createRing(48-i*4.5, 0, 53, "x");
-		createRing(47.5-i*4.8, 0, -52.5, "x");
-		createRing(48, 0, 53-i*5, "x");
-		createRing(-48, 0, 53-i*5, "x");
+		createRing(48-i*4.5, 0, 53);
+		createRing(47.5-i*4.8, 0, -52.5);
+		createRing(48, 0, 53-i*5);
+		createRing(-48, 0, 53-i*5);
 	}
 	
 	for(i=0; i<29; i++) {
-		createRing(70-i*4.84, 0, 70.5, "x");
-		createRing(70-i*4.84, 0, -69.5, "x");
-		createRing(70, 0, 70.5-i*5, "x");
-		createRing(-70, 0, 70.5-i*5, "x");
+		createRing(70-i*4.84, 0, 70.5);
+		createRing(70-i*4.84, 0, -69.5);
+		createRing(70, 0, 70.5-i*5);
+		createRing(-70, 0, 70.5-i*5);
 	}
 
 }
@@ -87,7 +87,7 @@ function createOrange(x, y, z) {
 	scene.add(orange);
 }
 
-function createRing(x, y, z, flag) {
+function createRing(x, y, z) {
 	'use strict';
 	
 	var ring = new THREE.Object3D();
@@ -96,13 +96,7 @@ function createRing(x, y, z, flag) {
 	mesh = new THREE.Mesh(geometry, material);
 	ring.add(mesh);
 	ring.position.set(x, y, z);
-
-	if (flag == "x") {
-		ring.rotateX(1.4);
-	} else if (flag == "z") {
-		ring.rotateY(1.5);
-		ring.rotateX(0.55);
-	}
+	ring.rotateX(1.4);
 	scene.add(ring);
 }
 

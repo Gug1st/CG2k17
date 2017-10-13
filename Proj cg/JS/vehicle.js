@@ -1,3 +1,14 @@
+/*
+/ Construtor do carro
+/ 
+/ maxVel = velocidade limite do carro
+/ currentVel = velocidade atual do carro
+/ consVel = velocidade
+/ pedalSwitch = desacelaração ao virar
+/ lastPressed = desacelaração ao trocar andar para a frente/tras
+/ 
+*/	
+
 class vehicle {
 	
 	constructor() {
@@ -9,12 +20,22 @@ class vehicle {
 		this.obj = new THREE.Object3D();
 	}
 }
-	
+
+/*
+/ Funcao change position, para colocar o node do carro na pista
+*/	
+
 function changePosition(vehicle, x, y, z) {	
 	'use strict';
 
 	vehicle.obj.position.set(x, y, z);
 }
+
+/*
+/ addWheel
+/
+/ Funcao que cria as rodas do carro, juntando o material e a geometria ao mesh do carro (torus), na posicao xyz
+*/	
 	
 function addWheel(obj, x, y, z) {
 	'use strict';
@@ -28,6 +49,12 @@ function addWheel(obj, x, y, z) {
 	obj.add(mesh);
 }
 
+/*
+/ addLight
+/
+/ Funcao que cria as luzes do carro, juntando o material e a geometria ao mesh do carro (esfera), na posicao xyz
+*/	
+
 function addLight(obj, x, y, z){
 	'use strict';
 	
@@ -38,6 +65,12 @@ function addLight(obj, x, y, z){
 	obj.add(mesh);
 }
 
+/*
+/ addCar
+/
+/ Funcao que cria o carro, juntando o material e a geometria ao mesh do carro (cubo), na posicao xyz
+*/	
+
 function addCar(obj, x, y, z) {
 	'use strict';
 	
@@ -46,6 +79,14 @@ function addCar(obj, x, y, z) {
 	mesh.position.set(x, y, z);
 	obj.add(mesh);
 }
+
+/*
+/ createCar
+/
+/ Funcao que cria o conteudo do objeto carro, usando o carro (addCar),
+/ as rodas (addWheel) e as luzes (addLight). Adiciona depois o resultado a cena
+/
+*/
 
 function createCar(vehicle, x, y, z) {
 	'use strict';
@@ -63,6 +104,14 @@ function createCar(vehicle, x, y, z) {
 
 }
 
+/*
+/ calcVelocity
+/
+/ calcula a velocidade, dependendo de premir a tecla up (38) ou down (40)
+/ calcula tambem o atrito caso nao haja teclas premidas, e desloca-as
+/
+*/
+
 function calcVelocity(vehicle) {
 	'use strict';
 	
@@ -76,16 +125,26 @@ function calcVelocity(vehicle) {
 		}
 	} else if (!map[40] || !map[38]) {
 		if (vehicle.currentVel > 0) {
-			vehicle.currentVel -= delta * vehicle.consVel + 0.001;
-			if (vehicle.lastPressed == "f")
-				vehicle.obj.translateZ( - vehicle.currentVel );
-			else if (lastPressed == "b")
+			if (vehicle.lastPressed == "b") {
+				vehicle.currentVel -= delta * vehicle.consVel;
 				vehicle.obj.translateZ( vehicle.currentVel );
-		} else { 
-			vehicle.currentVel = 0;
+			}
+			if (vehicle.lastPressed == "f") {
+				vehicle.currentVel -= delta * vehicle.consVel;
+				vehicle.obj.translateZ( -vehicle.currentVel );
+			}
 		}
 	}
 }
+
+
+/*
+/ movement
+/ 
+/ 
+/ 
+/
+*/
 
 function movement(vehicle) {
 	'use strict';
@@ -98,10 +157,11 @@ function movement(vehicle) {
 		if (map[39])
 			vehicle.obj.rotateOnAxis(yAxis, -0.05);
 		if (vehicle.lastPressed == "b") {
-			if (vehicle.currentVel - vehicle.currentVel < 0)
+			if (vehicle.currentVel - vehicle.pedalSwitch < 0)
 				vehicle.currentVel = 0;
+			else
+				vehicle.currentVel -= vehicle.pedalSwitch;
 			vehicle.lastPressed = "";
-			vehicle.currentVel -= vehicle.pedalSwitch;
 		}
 		vehicle.obj.translateZ( - vehicle.currentVel );
 	} else if (map[40]) {
@@ -112,10 +172,11 @@ function movement(vehicle) {
 		if (vehicle.currentVel >= vehicle.maxVel / 2)
 			vehicle.currentVel = vehicle.maxVel / 2;
 		if (vehicle.lastPressed == "f") {
-			if (vehicle.currentVel - vehicle.currentVel < 0)
+			if (vehicle.currentVel - vehicle.pedalSwitch < 0)
 				vehicle.currentVel = 0;
+			else
+				vehicle.currentVel -= vehicle.pedalSwitch;
 			vehicle.lastPressed = "";
-			vehicle.currentVel -= vehicle.pedalSwitch;
 		}
 		vehicle.obj.translateZ( vehicle.currentVel );
 	} else if (map[39]) {
