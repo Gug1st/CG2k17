@@ -1,4 +1,4 @@
-var cameraOrthographic, cameraPerspective, cameraDriver, scene, renderer;
+var camera, scene, renderer;
 
 var car, ring;
 var geometry, material, mesh;
@@ -8,7 +8,7 @@ var aspect = window.innerWidth / window.innerHeight;
 var clock, delta;
 var map = {37: false, 38: false, 39: false, 40: false};
 var frustumSize = 1000;
-var lastPressed, lastCamera;
+var lastPressed, changed, cameraType;
 
 
 /**
@@ -109,7 +109,7 @@ function createRing(x, y, z) {
  * CombinedCamera(width, height, fov, near, far, orthoNear, orthoFar)
  * Creates a CombinedCamera. This initializes 2 cameras, an OrthographicCamera and a PerspectiveCamera. The default is the perspective Camera.
  */
-function createCameras() {
+function createCamera() {
 	'use strict';
 	// Orthographic Camera (Top View) - OrthographicCamera( left, right, top, bottom, near, far )
 	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - 10, frustumSize * aspect / 10, frustumSize / 10, frustumSize / - 10, 1, 2000 );
@@ -117,7 +117,7 @@ function createCameras() {
 	cameraOrthographic.lookAt(scene.position);
 	// Perspective Camera (Perspective View) - PerspectiveCamera( fov, aspect, near, far )
 	cameraPerspective = new THREE.PerspectiveCamera( 90, frustumSize * aspect / frustumSize, 1, 2000 );
-	cameraPerspective.position.y = 50;
+	cameraPerspective.position.y = 142;
 	cameraPerspective.position.x = -100;
 	cameraPerspective.position.z = 50;
 	cameraPerspective.lookAt(scene.position);
@@ -148,31 +148,15 @@ function createScene() {
 
 function render() {
 	'use strict';
-	if (lastCamera == 1) {
-		renderer.render(scene, cameraOrthographic);
-	}
-	else if  (lastCamera == 2){
-		renderer.render(scene, cameraPerspective);
-	}
-	else if (lastCamera == 3){
-		renderer.render(scene, cameraDriver);
-	}
-}
 
-function updateChaseCam(){
-	var vectorChaseCam = new THREE.Vector3(0,0,0);
-	var cameraMovement = vectorChaseCam.applyMatrix4(car.matrixWorld);
-	cameraDriver.position.x = cameraMovement.x;
-	cameraDriver.position.y = cameraMovement.y;
-	cameraDriver.position.z = cameraMovement.z;
-	cameraDriver.lookAt( car.position );
+	renderer.render(scene, camera);
 }
 
 function animate() {
-	'use strict';
+	cameraUpdate();
 	calcVelocity(car);
 	movement(car);
-	//updateChaseCam();
+	onResize();
 	render();
 	requestAnimationFrame(animate);
 
@@ -191,19 +175,31 @@ function onResize(){
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
+function cameraUpdate() {
+	if (map[49]) {
+		if (changed != "o") {
+			createCamera();
+			changed = "o";
+		}
+	} else if (map[50]) {
+		if (changed != "p") {
+			createCamera2();
+			changed = "p";
+		}
+	} else if (map[51]) {
+		if (changed != "mp") {
+			createCamera3();
+			changed = "mp";
+		}
+	}
+
+
+}
+
 function onKeyDown(e) {
 	'use strict';
 
 	switch (e.keyCode) {
-
-	case 65: //A
-	case 97: //a
-		scene.traverse(function (node) {
-			if (node instanceof THREE.Mesh) {
-				node.material.wireframe = !node.material.wireframe;
-			}
-		});
-		break;
 
 	case 37: //Arrow Left
 		map[e.keyCode] = true;
@@ -266,7 +262,7 @@ function init() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 	createScene();
-	createCameras();
+	createCamera();
 	render();
 	window.addEventListener("resize", onResize);
 	window.addEventListener("keydown", onKeyDown);
