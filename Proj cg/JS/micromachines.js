@@ -7,7 +7,7 @@ var aspect = window.innerWidth / window.innerHeight;
 
 var clock, delta;
 var map = {37: false, 38: false, 39: false, 40: false};
-var frustumSize = 1000;
+var frustumSize = 1000; cameraFactor = 10;
 var lastPressed, lastCamera;
 
 
@@ -112,13 +112,13 @@ function createRing(x, y, z) {
 function createCameras() {
 	'use strict';
 	// Orthographic Camera (Top View) - OrthographicCamera( left, right, top, bottom, near, far )
-	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - 10, frustumSize * aspect / 10, frustumSize / 10, frustumSize / - 10, 1, 2000 );
+	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - cameraFactor, frustumSize * aspect / cameraFactor, frustumSize / cameraFactor, frustumSize / - cameraFactor, 1, 2000 );
 	cameraOrthographic.position.y = 400;
 	cameraOrthographic.lookAt(scene.position);
 	// Perspective Camera (Perspective View) - PerspectiveCamera( fov, aspect, near, far )
-	cameraPerspective = new THREE.PerspectiveCamera( 90, frustumSize * aspect / frustumSize, 1, 2000 );
-	cameraPerspective.position.y = 50;
-	cameraPerspective.position.x = -100;
+	cameraPerspective = new THREE.PerspectiveCamera( 60, frustumSize * aspect / frustumSize, 1, 2000 );
+	cameraPerspective.position.y = 100;
+	cameraPerspective.position.x = -150;
 	cameraPerspective.position.z = 50;
 	cameraPerspective.lookAt(scene.position);
 	// Driver Camera (Perspective View) - PerspectiveCamera( fov, aspect, near, far )
@@ -159,15 +159,6 @@ function render() {
 	}
 }
 
-function updateChaseCam(){
-	var vectorChaseCam = new THREE.Vector3(0,0,0);
-	var cameraMovement = vectorChaseCam.applyMatrix4(car.matrixWorld);
-	cameraDriver.position.x = cameraMovement.x;
-	cameraDriver.position.y = cameraMovement.y;
-	cameraDriver.position.z = cameraMovement.z;
-	cameraDriver.lookAt( car.position );
-}
-
 function animate() {
 	'use strict';
 	calcVelocity(car);
@@ -178,14 +169,19 @@ function animate() {
 
 }
 
-
 function onResize(){
 		'use strict';
 		aspect = window.innerWidth / window.innerHeight;
-    cameraOrthographic.aspect = aspect;
+		// Orthographic Camera Resize
+		cameraOrthographic.left = frustumSize * aspect / - cameraFactor;
+		cameraOrthographic.right = frustumSize * aspect / cameraFactor;
+		cameraOrthographic.top = frustumSize / cameraFactor;
+		cameraOrthographic.bottom = frustumSize / - cameraFactor;
     cameraOrthographic.updateProjectionMatrix();
+		// Perspective Camera Resize
     cameraPerspective.aspect = aspect;
     cameraPerspective.updateProjectionMatrix();
+		// Driver Camera Resize
     cameraDriver.aspect = aspect;
     cameraDriver.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
