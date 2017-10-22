@@ -1,4 +1,4 @@
-var cameraOrthographic, cameraPerspective, cameraDriver, scene, renderer;
+var camera, scene, renderer;
 
 var car, ring;
 var geometry, material, mesh;
@@ -8,7 +8,7 @@ var aspect = window.innerWidth / window.innerHeight;
 var clock, delta;
 var map = {37: false, 38: false, 39: false, 40: false};
 var frustumSize = 1000;
-var lastPressed, lastCamera;
+var lastPressed, changed, cameraType;
 
 
 /**
@@ -109,25 +109,31 @@ function createRing(x, y, z) {
  * CombinedCamera(width, height, fov, near, far, orthoNear, orthoFar)
  * Creates a CombinedCamera. This initializes 2 cameras, an OrthographicCamera and a PerspectiveCamera. The default is the perspective Camera.
  */
-function createCameras() {
+function createCamera() {
 	'use strict';
-	// Orthographic Camera (Top View) - OrthographicCamera( left, right, top, bottom, near, far )
-	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - 10, frustumSize * aspect / 10, frustumSize / 10, frustumSize / - 10, 1, 2000 );
-	cameraOrthographic.position.y = 400;
-	cameraOrthographic.lookAt(scene.position);
-	// Perspective Camera (Perspective View) - PerspectiveCamera( fov, aspect, near, far )
-	cameraPerspective = new THREE.PerspectiveCamera( 90, frustumSize * aspect / frustumSize, 1, 2000 );
-	cameraPerspective.position.y = 50;
-	cameraPerspective.position.x = -100;
-	cameraPerspective.position.z = 50;
-	cameraPerspective.lookAt(scene.position);
-	cameraDriver = new THREE.PerspectiveCamera( 90, frustumSize * aspect / frustumSize, 1, 2000 );
-	car.obj.add(cameraDriver);
-	cameraDriver.position.y = 5;
-	cameraDriver.position.z = 10;
-	scene.add(cameraOrthographic);
-	scene.add(cameraPerspective);
-	lastCamera = 1;
+	
+	camera = new THREE.OrthographicCamera( frustumSize * aspect / - 10, frustumSize * aspect / 10, frustumSize / 10, frustumSize / - 10, 1, 2000 );
+	cameraType = 1;
+	camera.position.y = 400;
+	camera.lookAt(scene.position);
+}
+
+function createCamera2() {
+	'use strict';
+	
+	camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
+	cameraType = 2;
+	camera.position.y = 142.8;
+	camera.lookAt(scene.position);
+}
+
+function createCamera3() {
+	'use strict';
+	camera = new THREE.PerspectiveCamera;
+	cameraType = 3;
+	camera.position.y = 10; // <-- this is relative to the cube's position
+	camera.position.z = 50; // <-- this is relative to the cube's position
+	car.obj.add(camera);
 }
 
 function createScene() {
@@ -147,31 +153,15 @@ function createScene() {
 
 function render() {
 	'use strict';
-	if (lastCamera == 1) {
-		renderer.render(scene, cameraOrthographic);
-	}
-	else if  (lastCamera == 2){
-		renderer.render(scene, cameraPerspective);
-	}
-	else if (lastCamera == 3){
-		renderer.render(scene, cameraDriver);
-	}
-}
-
-function updateChaseCam(){
-	var vectorChaseCam = new THREE.Vector3(0,0,0);
-	var cameraMovement = vectorChaseCam.applyMatrix4(car.matrixWorld);
-	cameraDriver.position.x = cameraMovement.x;
-	cameraDriver.position.y = cameraMovement.y;
-	cameraDriver.position.z = cameraMovement.z;
-	cameraDriver.lookAt( car.position );
-}
+	
+	renderer.render(scene, camera);
+}	
 
 function animate() {
-	'use strict';
+	cameraUpdate();
 	calcVelocity(car);
 	movement(car);
-	//updateChaseCam();
+	onResize();
 	render();
 	requestAnimationFrame(animate);
 
@@ -189,28 +179,40 @@ function onResize() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
+function cameraUpdate() {
+	if (map[49]) {
+		if (changed != "o") {
+			createCamera();
+			changed = "o";
+		}
+	} else if (map[50]) {
+		if (changed != "p") {
+			createCamera2();
+			changed = "p";
+		}
+	} else if (map[51]) {
+		if (changed != "mp") {
+			createCamera3();
+			changed = "mp";
+		}
+	}
+	
+	
+}
+
 function onKeyDown(e) {
 	'use strict';
-
+	
 	switch (e.keyCode) {
-
-	case 65: //A
-	case 97: //a
-		scene.traverse(function (node) {
-			if (node instanceof THREE.Mesh) {
-				node.material.wireframe = !node.material.wireframe;
-			}
-		});
-		break;
 
 	case 37: //Arrow Left
 		map[e.keyCode] = true;
 		break;
-
+	
 	case 38: //Arrow Up
 		map[e.keyCode] = true;
 		break;
-
+	
 	case 39: //Arrow Right
 		map[e.keyCode] = true;
 		break;
@@ -218,20 +220,26 @@ function onKeyDown(e) {
 	case 40: //Arrow Down
 		map[e.keyCode] = true;
 		break;
-
-	case 49: // 1 - Orthographic Camera
+	
+	case 49:
 		map[e.keyCode] = true;
-		lastCamera=1;
 		break;
-
-	case 50: // 2 - Perspective Camera
+	
+	case 50:
 		map[e.keyCode] = true;
-		lastCamera=2;
 		break;
-
-	case 51: // 3 - Driver Camera
+	
+	case 51:
 		map[e.keyCode] = true;
-		lastCamera=3;
+		break;
+	
+	case 65: //A
+	case 97: //a
+		scene.traverse(function (node) {
+		if (node instanceof THREE.Mesh) {
+			node.material.wireframe = !node.material.wireframe;
+		}
+		});
 		break;
 	}
 }
@@ -239,36 +247,37 @@ function onKeyDown(e) {
 function onKeyUp(e) {
 	'use strict';
 	switch (e.keyCode) {
-
+		
 	case 37: //Arrow Left
 		map[e.keyCode] = false;
-		break;
-
+		break;	
+		
 	case 38: //Arrow Up
 		map[e.keyCode] = false;
 		car.lastPressed = "f";
 		break;
-
+		
 	case 39: //Arrow Right
 		map[e.keyCode] = false;
-		break;
-
+		break;	
+		
 	case 40: //Arrow Down
 		map[e.keyCode] = false;
 		car.lastPressed = "b";
-		break;
-
-	case 49: // 1 - Orthographic Camera
+		break;	
+	
+	case 49:
 		map[e.keyCode] = false;
 		break;
-
-	case 50: // 2 - Perspective Camera
+	
+	case 50:
 		map[e.keyCode] = false;
 		break;
-
-	case 51: // 3 - Driver Camera
+	
+	case 51:
 		map[e.keyCode] = false;
 		break;
+	
 	}
 }
 
