@@ -1,16 +1,16 @@
 /*
 / Construtor do carro
-/ 
+/
 / maxVel = velocidade limite do carro
 / currentVel = velocidade atual do carro
 / consVel = velocidade
 / pedalSwitch = desacelaração ao virar
 / lastPressed = desacelaração ao trocar andar para a frente/tras
-/ 
-*/	
+/
+*/
 
 class vehicle {
-	
+
 	constructor() {
 		this.maxVel = 0.5;
 		this.currentVel = 0;
@@ -23,9 +23,9 @@ class vehicle {
 
 /*
 / Funcao change position, para colocar o node do carro na pista
-*/	
+*/
 
-function changePosition(vehicle, x, y, z) {	
+function changePosition(vehicle, x, y, z) {
 	'use strict';
 
 	vehicle.obj.position.set(x, y, z);
@@ -35,11 +35,11 @@ function changePosition(vehicle, x, y, z) {
 / addWheel
 /
 / Funcao que cria as rodas do carro, juntando o material e a geometria ao mesh do carro (torus), na posicao xyz
-*/	
-	
+*/
+
 function addWheel(obj, x, y, z) {
 	'use strict';
-	
+
 	material = new THREE.MeshBasicMaterial({ color: 0x000000 });
 	geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
 	mesh = new THREE.Mesh(geometry, material);
@@ -53,11 +53,11 @@ function addWheel(obj, x, y, z) {
 / addLight
 /
 / Funcao que cria as luzes do carro, juntando o material e a geometria ao mesh do carro (esfera), na posicao xyz
-*/	
+*/
 
 function addLight(obj, x, y, z){
 	'use strict';
-	
+
 	geometry = new THREE.SphereGeometry(0.5,32,32);
 	material = new THREE.MeshBasicMaterial({ color: 0xFFFF00 });
 	mesh = new THREE.Mesh(geometry, material);
@@ -69,11 +69,11 @@ function addLight(obj, x, y, z){
 / addCar
 /
 / Funcao que cria o carro, juntando o material e a geometria ao mesh do carro (cubo), na posicao xyz
-*/	
+*/
 
 function addCar(obj, x, y, z) {
 	'use strict';
-	
+
 	geometry = new THREE.CubeGeometry(5, 1, 7);
 	mesh = new THREE.Mesh(geometry, material);
 	mesh.position.set(x, y, z);
@@ -90,7 +90,7 @@ function addCar(obj, x, y, z) {
 
 function createCar(vehicle, x, y, z) {
 	'use strict';
-	
+
 	vehicle.obj = new THREE.Object3D();
 	material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 	addCar(vehicle.obj, x, y, z);
@@ -114,9 +114,9 @@ function createCar(vehicle, x, y, z) {
 
 function calcVelocity(vehicle) {
 	'use strict';
-	
+
 	delta = clock.getDelta();
-	
+
 	if (map[40] || map[38]) {
 		if (vehicle.currentVel <= vehicle.maxVel){
 			vehicle.currentVel += delta * vehicle.consVel;
@@ -140,17 +140,17 @@ function calcVelocity(vehicle) {
 
 /*
 / movement
-/ 
-/ 
-/ 
+/
+/
+/
 /
 */
 
 function movement(vehicle) {
 	'use strict';
-	
+
 	var yAxis = new THREE.Vector3(0, 1, 0);
-	
+
 	if (map[38]){
 		if (map[37])
 			vehicle.obj.rotateOnAxis(yAxis, 0.05);
