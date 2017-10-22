@@ -94,10 +94,10 @@ function createCar(vehicle, x, y, z) {
 	vehicle.obj = new THREE.Object3D();
 	material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 	addCar(vehicle.obj, x, y, z);
-	addWheel(vehicle.obj, x+2.95, y, z+1.5);
-	addWheel(vehicle.obj, x-2.95, y, z+1.5);
-	addWheel(vehicle.obj, x+2.95, y, z-1.5);
-	addWheel(vehicle.obj, x-2.95, y, z-1.5);
+	addWheel(vehicle.obj, x+2.95, y-0.4, z+1.5);
+	addWheel(vehicle.obj, x-2.95, y-0.4, z+1.5);
+	addWheel(vehicle.obj, x+2.95, y-0.4, z-1.5);
+	addWheel(vehicle.obj, x-2.95, y-0.4, z-1.5);
 	addLight(vehicle.obj, x-1.5, y+1.5, z-2.5);
 	addLight(vehicle.obj, x+1.5, y+1.5, z-2.5);
 	scene.add(vehicle.obj);
