@@ -121,6 +121,7 @@ function createCameras() {
 	cameraPerspective.position.x = -100;
 	cameraPerspective.position.z = 50;
 	cameraPerspective.lookAt(scene.position);
+	// Driver Camera (Perspective View) - PerspectiveCamera( fov, aspect, near, far )
 	cameraDriver = new THREE.PerspectiveCamera( 90, frustumSize * aspect / frustumSize, 1, 2000 );
 	car.obj.add(cameraDriver);
 	cameraDriver.position.y = 5;
@@ -177,16 +178,17 @@ function animate() {
 
 }
 
-function onResize() {
-	'use strict';
 
-	aspect = window.innerWidth / window.innerHeight;
-	camera.left   = - frustumSize * aspect / 10;
-	camera.right  =   frustumSize * aspect / 10;
-	camera.top    =   frustumSize / 10;
-	camera.bottom = - frustumSize / 10;
-	camera.updateProjectionMatrix();
-	renderer.setSize( window.innerWidth, window.innerHeight );
+function onResize(){
+		'use strict';
+		aspect = window.innerWidth / window.innerHeight;
+    cameraOrthographic.aspect = aspect;
+    cameraOrthographic.updateProjectionMatrix();
+    cameraPerspective.aspect = aspect;
+    cameraPerspective.updateProjectionMatrix();
+    cameraDriver.aspect = aspect;
+    cameraDriver.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
 function onKeyDown(e) {
@@ -220,17 +222,14 @@ function onKeyDown(e) {
 		break;
 
 	case 49: // 1 - Orthographic Camera
-		map[e.keyCode] = true;
 		lastCamera=1;
 		break;
 
 	case 50: // 2 - Perspective Camera
-		map[e.keyCode] = true;
 		lastCamera=2;
 		break;
 
 	case 51: // 3 - Driver Camera
-		map[e.keyCode] = true;
 		lastCamera=3;
 		break;
 	}
@@ -256,18 +255,6 @@ function onKeyUp(e) {
 	case 40: //Arrow Down
 		map[e.keyCode] = false;
 		car.lastPressed = "b";
-		break;
-
-	case 49: // 1 - Orthographic Camera
-		map[e.keyCode] = false;
-		break;
-
-	case 50: // 2 - Perspective Camera
-		map[e.keyCode] = false;
-		break;
-
-	case 51: // 3 - Driver Camera
-		map[e.keyCode] = false;
 		break;
 	}
 }
