@@ -177,6 +177,7 @@ function onResize(){
 		cameraOrthographic.right = frustumSize * aspect / cameraFactor;
 		cameraOrthographic.top = frustumSize / cameraFactor;
 		cameraOrthographic.bottom = frustumSize / - cameraFactor;
+		cameraOrthographic.aspect = 1;
     cameraOrthographic.updateProjectionMatrix();
 		// Perspective Camera Resize
     cameraPerspective.aspect = aspect;
