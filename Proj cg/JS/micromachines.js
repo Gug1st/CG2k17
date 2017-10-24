@@ -6,7 +6,11 @@ var geometry, material, mesh;
 var aspect = window.innerWidth / window.innerHeight;
 
 var clock, delta;
+
 var map = {37: false, 38: false, 39: false, 40: false};
+var mapOranges = {};
+var mapButters = {};
+
 var frustumSize = 1000; cameraFactor = 10;
 var lastPressed, lastCamera;
 
@@ -23,8 +27,14 @@ function getRandomInt(min, max) {
  * Adds (numberOranges) between the min and max values randomly
  */
 function addOranges(numberOranges) {
-	for (var i=0; i<numberOranges; i++){
-		createOrange(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
+
+	var i;
+	for(i= 0; i<numberOranges; i++){
+		mapOranges[i+1] = new orange();
+	}
+
+	for (i=0; i<numberOranges; i++){
+		mapOranges[i+1].createOrange(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
 	}
 }
 
@@ -32,8 +42,14 @@ function addOranges(numberOranges) {
  * Adds (numberButters) between the min and max values randomly
  */
 function addButters(numberButters) {
-	for (var i=0; i<numberButters; i++){
-		createButter(getRandomInt(-70, 70), 0, getRandomInt(-50, 50));
+
+	var i;
+	for (i=0; i<numberButters; i++){
+		mapButters[i+1] = new butter();
+	}
+
+	for (i=0; i<numberButters; i++){
+		mapButters[i+1].createButter(getRandomInt(-70, 70), 0, getRandomInt(-50, 50));
 	}
 }
 
@@ -69,7 +85,7 @@ function createTable(x, y, z) {
 	scene.add(table);
 	addBorders();
 }
-
+/*
 function createButter(x, y, z) {
 	'use strict';
 	var butter = new THREE.Object3D();
@@ -77,20 +93,22 @@ function createButter(x, y, z) {
 	geometry = new THREE.CubeGeometry(3, 1.5, 6);
 	mesh = new THREE.Mesh(geometry, material);
 	butter.add(mesh);
+	geometry.computeBoundingSphere();
 	butter.position.set(x, y, z);
 	scene.add(butter);
-}
+}*/
 
-function createOrange(x, y, z) {
+/*function createOrange(x, y, z) {
 	'use strict';
 	var orange = new THREE.Object3D();
 	material = new THREE.MeshBasicMaterial({ wireframe: false, color: 0xffa500 });
 	geometry = new THREE.SphereGeometry(2, 10, 10);
 	mesh = new THREE.Mesh(geometry, material);
 	orange.add(mesh);
+	geometry.computeBoundingSphere();
 	orange.position.set(x, y, z);
 	scene.add(orange);
-}
+}*/
 
 function createRing(x, y, z) {
 	'use strict';
@@ -99,6 +117,7 @@ function createRing(x, y, z) {
 	geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
 	mesh = new THREE.Mesh(geometry, material);
 	ring.add(mesh);
+	geometry.computeBoundingSphere();
 	ring.position.set(x, y, z);
 	ring.rotateX(1.4);
 	scene.add(ring);
@@ -112,7 +131,8 @@ function createRing(x, y, z) {
 function createCameras() {
 	'use strict';
 	// Orthographic Camera (Top View) - OrthographicCamera( left, right, top, bottom, near, far )
-	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - cameraFactor, frustumSize * aspect / cameraFactor, frustumSize / cameraFactor, frustumSize / - cameraFactor, 1, 2000 );
+	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - cameraFactor, frustumSize * aspect / cameraFactor, 
+		frustumSize / cameraFactor, frustumSize / - cameraFactor, 1, 2000 );
 	cameraOrthographic.position.y = 400;
 	cameraOrthographic.lookAt(scene.position);
 	// Perspective Camera (Perspective View) - PerspectiveCamera( fov, aspect, near, far )
@@ -137,11 +157,9 @@ function createScene() {
 	scene.background = new THREE.Color(0x003300);
 	createTable(0, 0, 0);
 	car = new vehicle();
-	createCar(car, 0, 0, 0);
-	changePosition(car, 61, 1, 37);
+	car.createCar(0, 0, 0);
+	car.changePosition(61, 1, 37);
 	// Driver Camera (Chase Camera behind car View) - PerspectiveCamera( fov, aspect, near, far )
-
-
 	addOranges(8);
 	addButters(8);
 }
@@ -161,8 +179,9 @@ function render() {
 
 function animate() {
 	'use strict';
-	calcVelocity(car);
-	movement(car);
+	car.calcVelocity();
+	car.movement();
+	//checkCollision();
 	//updateChaseCam();
 	render();
 	requestAnimationFrame(animate);
@@ -170,19 +189,19 @@ function animate() {
 }
 
 function onResize(){
-		'use strict';
-		aspect = window.innerWidth / window.innerHeight;
-		// Orthographic Camera Resize
-		cameraOrthographic.left = frustumSize * aspect / - cameraFactor;
-		cameraOrthographic.right = frustumSize * aspect / cameraFactor;
-		cameraOrthographic.top = frustumSize / cameraFactor;
-		cameraOrthographic.bottom = frustumSize / - cameraFactor;
-		cameraOrthographic.aspect = 1;
+	'use strict';
+	aspect = window.innerWidth / window.innerHeight;
+	// Orthographic Camera Resize
+	cameraOrthographic.left = frustumSize * aspect / - cameraFactor;
+	cameraOrthographic.right = frustumSize * aspect / cameraFactor;
+	cameraOrthographic.top = frustumSize / cameraFactor;
+	cameraOrthographic.bottom = frustumSize / - cameraFactor;
+	cameraOrthographic.aspect = 1;
     cameraOrthographic.updateProjectionMatrix();
-		// Perspective Camera Resize
+	// Perspective Camera Resize
     cameraPerspective.aspect = aspect;
     cameraPerspective.updateProjectionMatrix();
-		// Driver Camera Resize
+	// Driver Camera Resize
     cameraDriver.aspect = aspect;
     cameraDriver.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
