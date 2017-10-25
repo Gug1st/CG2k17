@@ -29,12 +29,13 @@ function getRandomInt(min, max) {
 function addOranges(numberOranges) {
 
 	var i;
-	for(i= 0; i<numberOranges; i++){
-		mapOranges[i+1] = new orange();
+	for(i = 1; i<=numberOranges; i++){
+		mapOranges[i] = new orange();
 	}
 
-	for (i=0; i<numberOranges; i++){
-		mapOranges[i+1].createOrange(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
+	for (i =1; i<=numberOranges; i++){
+		mapOranges[i].createOrange(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
+		mapOranges[i].orangeBoundingSphere();
 	}
 }
 
@@ -44,12 +45,13 @@ function addOranges(numberOranges) {
 function addButters(numberButters) {
 
 	var i;
-	for (i=0; i<numberButters; i++){
-		mapButters[i+1] = new butter();
+	for (i=1; i<=numberButters; i++){
+		mapButters[i] = new butter();
 	}
 
-	for (i=0; i<numberButters; i++){
-		mapButters[i+1].createButter(getRandomInt(-70, 70), 0, getRandomInt(-50, 50));
+	for (i=1; i<=numberButters; i++){
+		mapButters[i].createButter(getRandomInt(-70, 70), 0, getRandomInt(-50, 50));
+		mapButters[i].butterBoundingSphere();
 	}
 }
 
@@ -112,17 +114,24 @@ function createButter(x, y, z) {
 
 function createRing(x, y, z) {
 	'use strict';
+	
 	var ring = new THREE.Object3D();
+
 	material = new THREE.MeshBasicMaterial({ color: 0x000000 });
 	geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
 	mesh = new THREE.Mesh(geometry, material);
+
 	ring.add(mesh);
-	geometry.computeBoundingSphere();
 	ring.position.set(x, y, z);
 	ring.rotateX(1.4);
+
+	// ComputingBoundingSphere for cheerios
+	for (var i = 0; i<ring.children.lenght; i++){
+		ring.children[i].geometry.computeBoundingSphere();
+	}
+
 	scene.add(ring);
 }
-
 
 /**
  * CombinedCamera(width, height, fov, near, far, orthoNear, orthoFar)
@@ -156,9 +165,13 @@ function createScene() {
 	scene = new THREE.Scene();
 	scene.background = new THREE.Color(0x003300);
 	createTable(0, 0, 0);
+
 	car = new vehicle();
 	car.createCar(0, 0, 0);
 	car.changePosition(61, 1, 37);
+
+	car.vehicleBoundingSphere();
+
 	// Driver Camera (Chase Camera behind car View) - PerspectiveCamera( fov, aspect, near, far )
 	addOranges(8);
 	addButters(8);

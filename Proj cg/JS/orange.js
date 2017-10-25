@@ -21,19 +21,14 @@ class orange{
 		this.obj.position.set(x, y, z);
 	}
 
-
 	createOrange(x, y, z) {
-	'use strict';
+		'use strict';
 
 		material = new THREE.MeshBasicMaterial({ wireframe: false, color: 0xffa500 });
 		geometry = new THREE.SphereGeometry(2, 10, 10);
 		mesh = new THREE.Mesh(geometry, material);
 
 		this.obj.add(mesh);
-
-		//orange.obj.geometry.computeBoundingSphere();
-		//geometry.computeBoundingSphere();
-
 		this.obj.position.set(x, y, z);
 
 		scene.add(this.obj);
@@ -41,6 +36,11 @@ class orange{
 
 	increaseSpeed(){
 
+	}
+
+	orangeBoundingSphere(){
+		for (var i = 0; i < this.obj.children.length; i++) 
+	    	this.obj.children[i].geometry.computeBoundingSphere();
 	}
 
 }

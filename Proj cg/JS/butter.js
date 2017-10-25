@@ -24,15 +24,20 @@ class butter {
 
 		material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 		geometry = new THREE.CubeGeometry(3, 1.5, 6);
+
 		mesh = new THREE.Mesh(geometry, material);
+
 		this.obj.add(mesh);
-
-		//butter.obj.geometry.computeBoundingSphere();
-		//geometry.computeBoundingSphere();
-
 		this.obj.position.set(x, y, z);
+
 		scene.add(this.obj);
 	}
+
+	butterBoundingSphere(){
+		for (var i = 0; i < this.obj.children.length; i++)
+		    this.obj.children[i].geometry.computeBoundingSphere();
+	}
+
 }
 
 /*function changePosition(butter, x, y, z) {	
