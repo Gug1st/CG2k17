@@ -187,7 +187,7 @@ function checkCollisions(){
 			break;
 		}*/
 		if(car.BSphere.intersectsSphere(mapOranges[i].BSphere))
-			car.collision = true;
+			car.changePosition(61, 1, 37);
 	}
 }
 
