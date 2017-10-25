@@ -204,7 +204,7 @@ function animate() {
 	'use strict';
 	car.calcVelocity();
 	car.movement();
-	checkCollisions();
+	//checkCollisions();
 	//updateChaseCam();
 	render();
 	requestAnimationFrame(animate);
