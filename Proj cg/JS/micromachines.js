@@ -151,7 +151,7 @@ function createScene() {
 	addButters(8);
 }
 
-function checkCollisions(){
+/*function checkCollisions(){
 	var i, j;
 	var x, x1, x2;
 	var z, z1, z2;
@@ -185,7 +185,7 @@ function checkCollisions(){
 			}
 		}	
 	}
-}
+}*/
 
 function render() {
 	'use strict';
