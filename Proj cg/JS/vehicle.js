@@ -20,6 +20,7 @@ class vehicle {
 		this.obj = new THREE.Object3D();
 		this.collision = false;
 		this.BSphere;
+		this.cantMove = "";
 	}
 
 	/*
@@ -123,7 +124,7 @@ class vehicle {
 	
 		delta = clock.getDelta();
 	
-		if (map[40] || map[38]) {
+		if ((map[40] || map[38])) {
 			if (this.currentVel <= this.maxVel){
 				this.currentVel += delta * this.consVel;
 			} else {
@@ -131,11 +132,11 @@ class vehicle {
 			}
 		} else if (!map[40] || !map[38]) {
 			if (this.currentVel > 0) {
-				if (this.lastPressed == "b") {
+				if (this.lastPressed == "b" && this.cantMove != "b") {
 					this.currentVel -= delta * this.consVel;
 					this.obj.translateZ( this.currentVel );
 				}
-				if (this.lastPressed == "f") {
+				if (this.lastPressed == "f" && this.cantMove != "f") {
 					this.currentVel -= delta * this.consVel;
 					this.obj.translateZ( -this.currentVel );
 				}
@@ -153,7 +154,7 @@ class vehicle {
 		
 		var yAxis = new THREE.Vector3(0, 1, 0);
 	
-		if (map[38]){
+		if (map[38] && this.cantMove != "f"){
 			if (map[37])
 				this.obj.rotateOnAxis(yAxis, 0.05);
 			if (map[39])
@@ -166,7 +167,7 @@ class vehicle {
 				this.lastPressed = "";
 			}
 			this.obj.translateZ( - this.currentVel );
-		} else if (map[40]) {
+		} else if (map[40] && this.cantMove != "b") {
 			if (map[37])
 				this.obj.rotateOnAxis(yAxis, 0.05);
 			if (map[39])
