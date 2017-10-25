@@ -37,7 +37,7 @@ function addOranges(numberOranges) {
 	}
 
 	for (i =1; i<=numberOranges; i++){
-		mapOranges[i].createOrange(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
+		mapOranges[i].createOrange(getRandomInt(-70, 70), 2, getRandomInt(-50, 50));
 		mapOranges[i].orangeBoundingSphere();
 	}
 }
@@ -53,7 +53,7 @@ function addButters(numberButters) {
 	}
 
 	for (i=1; i<=numberButters; i++){
-		mapButters[i].createButter(getRandomInt(-70, 70), 0, getRandomInt(-50, 50));
+		mapButters[i].createButter(getRandomInt(-70, 70), 1.5, getRandomInt(-50, 50));
 		mapButters[i].butterBoundingSphere();
 	}
 }
@@ -117,7 +117,7 @@ function createRing(x, y, z) {
 function createCameras() {
 	'use strict';
 	// Orthographic Camera (Top View) - OrthographicCamera( left, right, top, bottom, near, far )
-	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - cameraFactor, frustumSize * aspect / cameraFactor, 
+	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - cameraFactor, frustumSize * aspect / cameraFactor,
 		frustumSize / cameraFactor, frustumSize / - cameraFactor, 1, 2000 );
 	cameraOrthographic.position.y = 400;
 	cameraOrthographic.lookAt(scene.position);
