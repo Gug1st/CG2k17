@@ -7,6 +7,7 @@ class butter {
 	
 	constructor() {
 		this.obj = new THREE.Object3D();
+		this.BSphere;
 	}
 
 	/*
@@ -34,8 +35,7 @@ class butter {
 	}
 
 	butterBoundingSphere(){
-		for (var i = 0; i < this.obj.children.length; i++)
-		    this.obj.children[i].geometry.computeBoundingSphere();
+		this.BSphere = new THREE.Sphere(this.obj.position, 3.36);
 	}
 
 }

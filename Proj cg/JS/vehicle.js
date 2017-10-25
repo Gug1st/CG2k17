@@ -18,6 +18,8 @@ class vehicle {
 		this.pedalSwitch = 0.1;
 		this.lastPressed = "";
 		this.obj = new THREE.Object3D();
+		this.collision = false;
+		this.BSphere;
 	}
 
 	/*
@@ -102,8 +104,10 @@ class vehicle {
 	}
 
 	vehicleBoundingSphere() {
-		for (var i = 0; i < this.obj.children.length; i++)
-	    	this.obj.children[i].geometry.computeBoundingSphere();
+
+		this.BSphere = new THREE.Sphere(this.obj.position, 4.43);
+		/*for (var i = 0; i < this.obj.children.length; i++)
+	    	this.obj.children[i].geometry.computeBoundingSphere();*/
 	}
 
 

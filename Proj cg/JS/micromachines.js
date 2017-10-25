@@ -1,3 +1,6 @@
+var NUM_ORANGES = 8;
+var NUM_BUTTERS = 8;
+
 var cameraOrthographic, cameraPerspective, cameraDriver, scene, renderer;
 
 var car, ring;
@@ -147,45 +150,46 @@ function createScene() {
 	car.vehicleBoundingSphere();
 
 	// Driver Camera (Chase Camera behind car View) - PerspectiveCamera( fov, aspect, near, far )
-	addOranges(8);
-	addButters(8);
+	addOranges(NUM_ORANGES);
+	addButters(NUM_BUTTERS);
 }
 
-/*function checkCollisions(){
-	var i, j;
+function checkCollisions(){
+	var i;
 	var x, x1, x2;
 	var z, z1, z2;
 	var distance, dSquare;
 
-	for (i = 0; i < car.children.lenght; i++){
+	for (i = 1; i <= NUM_ORANGES; i++){
 		// colisao para a laranja?
-		for (j = 1; j <= mapOranges.lenght; j++){
-			//teorema de pitagoras?
-			x1 = car.position.x;
-			x2 = mapOranges[j].position.x;
-			z1 = car.position.z;
-			z2 = mapOranges[j].position.z;
+		//teorema de pitagoras?
+		/*x1 = car.position.x;
+		x2 = mapOranges[j].position.x;
+		z1 = car.position.z;
+		z2 = mapOranges[j].position.z;
 
-			if (x1 > x1)
-				x = x1 - x2;
-			else
-				x = x2 - x1;
+		if (x1 > x1)
+			x = x1 - x2;
+		else
+			x = x2 - x1;
 
-			if (z1 > z2)
-				z = z1 - z2;
-			else
-				z = z2 - z1;
+		if (z1 > z2)
+			z = z1 - z2;
+		else
+			z = z2 - z1;
 
-			distance = (x*x) + (z*z);
-			dSquare = Math.sqrt(d);
+		distance = (x*x) + (z*z);
+		dSquare = Math.sqrt(d);
 
-			if (dSquare < (mapOranges[j].children[0].geometry.boundingSphere.radius + car.children[i].geometry.boundingSphere.radius)){
-				car.collision = true;
-				mapOranges[j].collision = true;
-			}
-		}	
+		if (dSquare < (mapOranges[j].children[0].geometry.boundingSphere.radius + car.BSphere.radius)){
+			car.collision = true;
+			mapOranges[j].collision = true;
+			break;
+		}*/
+		if(car.BSphere.intersectsSphere(mapOranges[i].BSphere))
+			car.collision = true;
 	}
-}*/
+}
 
 function render() {
 	'use strict';
@@ -198,13 +202,16 @@ function render() {
 	else if (lastCamera == 3){
 		renderer.render(scene, cameraDriver);
 	}
+	else if(car.collision == true){
+		//
+	}
 }
 
 function animate() {
 	'use strict';
 	car.calcVelocity();
 	car.movement();
-	//checkCollisions();
+	checkCollisions();
 	//updateChaseCam();
 	render();
 	requestAnimationFrame(animate);

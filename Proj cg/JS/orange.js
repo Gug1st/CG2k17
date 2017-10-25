@@ -10,6 +10,8 @@ class orange{
 	constructor() {
 		this.currentVel = 0;
 		this.obj = new THREE.Object3D();
+		this.collision = false;
+		this.BSphere;
 	}
 
 	/*
@@ -39,8 +41,7 @@ class orange{
 	}
 
 	orangeBoundingSphere(){
-		for (var i = 0; i < this.obj.children.length; i++) 
-	    	this.obj.children[i].geometry.computeBoundingSphere();
+		this.BSphere = new THREE.Sphere(this.obj.position, 2);
 	}
 
 }
