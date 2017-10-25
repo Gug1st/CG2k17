@@ -32,12 +32,12 @@ function getRandomInt(min, max) {
 function addOranges(numberOranges) {
 
 	var i;
-	for(i = 1; i<=numberOranges; i++){
+	for (i=0; i<numberOranges; i++){
 		mapOranges[i] = new orange();
 	}
 
-	for (i =1; i<=numberOranges; i++){
-		mapOranges[i].createOrange(getRandomInt(-70, 70), 2, getRandomInt(-50, 50));
+	for (i=0; i<numberOranges; i++){
+		mapOranges[i].createOrange(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
 		mapOranges[i].orangeBoundingSphere();
 	}
 }
@@ -48,12 +48,12 @@ function addOranges(numberOranges) {
 function addButters(numberButters) {
 
 	var i;
-	for (i=1; i<=numberButters; i++){
+	for (i=0; i<numberButters; i++){
 		mapButters[i] = new butter();
 	}
 
-	for (i=1; i<=numberButters; i++){
-		mapButters[i].createButter(getRandomInt(-70, 70), 1.5, getRandomInt(-50, 50));
+	for (i=0; i<numberButters; i++){
+		mapButters[i].createButter(getRandomInt(-70, 70), 0, getRandomInt(-50, 50));
 		mapButters[i].butterBoundingSphere();
 	}
 }
@@ -117,7 +117,7 @@ function createRing(x, y, z) {
 function createCameras() {
 	'use strict';
 	// Orthographic Camera (Top View) - OrthographicCamera( left, right, top, bottom, near, far )
-	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - cameraFactor, frustumSize * aspect / cameraFactor,
+	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - cameraFactor, frustumSize * aspect / cameraFactor, 
 		frustumSize / cameraFactor, frustumSize / - cameraFactor, 1, 2000 );
 	cameraOrthographic.position.y = 400;
 	cameraOrthographic.lookAt(scene.position);
@@ -154,41 +154,83 @@ function createScene() {
 	addButters(NUM_BUTTERS);
 }
 
-function checkCollisions(){
-	var i;
-	var x, x1, x2;
-	var z, z1, z2;
-	var distance, dSquare;
+function checkOrangeCollisions() {
+	'use strict';
 
-	for (i = 1; i <= NUM_ORANGES; i++){
+	var i;
+	var x1, x2, x3;
+	var z1, z2, z3;
+	var distance, dSquare;
+	
+	for (var i = 0; i < NUM_ORANGES; i++){
 		// colisao para a laranja?
 		//teorema de pitagoras?
-		/*x1 = car.position.x;
-		x2 = mapOranges[j].position.x;
-		z1 = car.position.z;
-		z2 = mapOranges[j].position.z;
+		x1 = car.obj.position.x;
+		x2 = mapOranges[i].obj.position.x;
+		z1 = car.obj.position.z;
+		z2 = mapOranges[i].obj.position.z;
 
-		if (x1 > x1)
-			x = x1 - x2;
+		if (x1 > x2)
+			x3 = x1 - x2;
 		else
-			x = x2 - x1;
+			x3 = x2 - x1;
 
 		if (z1 > z2)
-			z = z1 - z2;
+			z3 = z1 - z2;
 		else
-			z = z2 - z1;
+			z3 = z2 - z1;
 
-		distance = (x*x) + (z*z);
-		dSquare = Math.sqrt(d);
+		distance = (x3*x3) + (z3*z3);
+		dSquare = Math.sqrt(distance);
 
-		if (dSquare < (mapOranges[j].children[0].geometry.boundingSphere.radius + car.BSphere.radius)){
-			car.collision = true;
-			mapOranges[j].collision = true;
-			break;
-		}*/
-		if(car.BSphere.intersectsSphere(mapOranges[i].BSphere))
+		if (dSquare < (mapOranges[i].BSphere.radius + car.BSphere.radius))
 			car.changePosition(61, 1, 37);
 	}
+}
+
+function checkButterCollisions() {
+	'use strict';
+	
+	var i;
+	var x1, x2, x3;
+	var z1, z2, z3;
+	var distance, dSquare;
+	
+	for (i = 0; i < NUM_BUTTERS; i++){
+		// colisao para a laranja?
+		//teorema de pitagoras?
+		x1 = car.obj.position.x;
+		x2 = mapButters[i].obj.position.x;
+		z1 = car.obj.position.z;
+		z2 = mapButters[i].obj.position.z;
+
+		if (x1 > x2)
+			x3 = x1 - x2;
+		else
+			x3 = x2 - x1;
+
+		if (z1 > z2)
+			z3 = z1 - z2;
+		else
+			z3 = z2 - z1;
+
+		distance = (x3*x3) + (z3*z3);
+		dSquare = Math.sqrt(distance);
+
+		if (dSquare < (mapButters[i].BSphere.radius + car.BSphere.radius)) {
+			if (car.lastPressed == "f") 
+				car.cantMove = "f";
+			else if (car.lastPressed == "b") 
+				car.cantMove = "b";
+		}
+	}
+}
+
+function checkCollisions(){
+	'use strict';
+	
+	checkOrangeCollisions();
+	checkButterCollisions();
 }
 
 function render() {
@@ -256,6 +298,7 @@ function onKeyDown(e) {
 		break;
 
 	case 38: //Arrow Up
+		car.lastPressed = "f";
 		map[e.keyCode] = true;
 		break;
 
@@ -264,6 +307,7 @@ function onKeyDown(e) {
 		break;
 
 	case 40: //Arrow Down
+		car.lastPressed = "b";
 		map[e.keyCode] = true;
 		break;
 
@@ -291,7 +335,7 @@ function onKeyUp(e) {
 
 	case 38: //Arrow Up
 		map[e.keyCode] = false;
-		car.lastPressed = "f";
+		map[e.keyCode] = false;
 		break;
 
 	case 39: //Arrow Right
@@ -300,7 +344,6 @@ function onKeyUp(e) {
 
 	case 40: //Arrow Down
 		map[e.keyCode] = false;
-		car.lastPressed = "b";
 		break;
 	}
 }
