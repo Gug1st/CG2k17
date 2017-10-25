@@ -87,34 +87,10 @@ function createTable(x, y, z) {
 	scene.add(table);
 	addBorders();
 }
-/*
-function createButter(x, y, z) {
-	'use strict';
-	var butter = new THREE.Object3D();
-	material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-	geometry = new THREE.CubeGeometry(3, 1.5, 6);
-	mesh = new THREE.Mesh(geometry, material);
-	butter.add(mesh);
-	geometry.computeBoundingSphere();
-	butter.position.set(x, y, z);
-	scene.add(butter);
-}*/
-
-/*function createOrange(x, y, z) {
-	'use strict';
-	var orange = new THREE.Object3D();
-	material = new THREE.MeshBasicMaterial({ wireframe: false, color: 0xffa500 });
-	geometry = new THREE.SphereGeometry(2, 10, 10);
-	mesh = new THREE.Mesh(geometry, material);
-	orange.add(mesh);
-	geometry.computeBoundingSphere();
-	orange.position.set(x, y, z);
-	scene.add(orange);
-}*/
 
 function createRing(x, y, z) {
 	'use strict';
-	
+
 	var ring = new THREE.Object3D();
 
 	material = new THREE.MeshBasicMaterial({ color: 0x000000 });
@@ -125,10 +101,8 @@ function createRing(x, y, z) {
 	ring.position.set(x, y, z);
 	ring.rotateX(1.4);
 
-	// ComputingBoundingSphere for cheerios
-	for (var i = 0; i<ring.children.lenght; i++){
-		ring.children[i].geometry.computeBoundingSphere();
-	}
+	// ComputeBoundingSphere for the ring
+	ring.children[0].geometry.computeBoundingSphere();
 
 	scene.add(ring);
 }
@@ -177,6 +151,42 @@ function createScene() {
 	addButters(8);
 }
 
+function checkCollisions(){
+	var i, j;
+	var x, x1, x2;
+	var z, z1, z2;
+	var distance, dSquare;
+
+	for (i = 0; i < car.children.lenght; i++){
+		// colisao para a laranja?
+		for (j = 1; j <= mapOranges.lenght; j++){
+			//teorema de pitagoras?
+			x1 = car.position.x;
+			x2 = mapOranges[j].position.x;
+			z1 = car.position.z;
+			z2 = mapOranges[j].position.z;
+
+			if (x1 > x1)
+				x = x1 - x2;
+			else
+				x = x2 - x1;
+
+			if (z1 > z2)
+				z = z1 - z2;
+			else
+				z = z2 - z1;
+
+			distance = (x*x) + (z*z);
+			dSquare = Math.sqrt(d);
+
+			if (dSquare < (mapOranges[j].children[0].geometry.boundingSphere.radius + car.children[i].geometry.boundingSphere.radius)){
+				car.collision = true;
+				mapOranges[j].collision = true;
+			}
+		}	
+	}
+}
+
 function render() {
 	'use strict';
 	if (lastCamera == 1) {
@@ -194,7 +204,7 @@ function animate() {
 	'use strict';
 	car.calcVelocity();
 	car.movement();
-	//checkCollision();
+	checkCollisions();
 	//updateChaseCam();
 	render();
 	requestAnimationFrame(animate);
