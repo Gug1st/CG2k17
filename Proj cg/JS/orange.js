@@ -8,7 +8,7 @@
 class orange{
 	
 	constructor() {
-		this.currentVel = 0.05;
+		this.currentVel = 0.03;
 		this.obj = new THREE.Object3D();
 		this.BSphere;
 	}
@@ -29,6 +29,16 @@ class orange{
 		mesh = new THREE.Mesh(geometry, material);
 
 		this.obj.add(mesh);
+
+		/*folha
+
+		var leafGeometry = new THREE.PlaneGeometry( 1, 5, 32);
+		var leafMaterial = new THREE.MeshBasicMaterial( {color: 0x32CD32, side: THREE.DoubleSide} );
+		var leafMesh = new THREE.Mesh( geometry, material );
+
+		leafMesh.position.set(x, y, z);
+		this.obj.add(leafMesh);*/
+
 		this.obj.position.set(x, y, z);
 
 		scene.add(this.obj);
@@ -39,12 +49,19 @@ class orange{
 	}
 
 	increaseSpeed() {
-		this.currentVel += 0.09;
+		// mov rectilineo uniforme
+		// velocidades diferentes ??
+		//this.currentVel += getRandomInt(0.001, 0.005);
+		this.currentVel += 0.009;
 
 	}
 
 	movement() {
+		var yAxis = new THREE.Vector3(0, 0, 1);
+
 		this.obj.translateZ(this.currentVel);
+		// roda sobre si propria
+		this.obj.rotateOnAxis(yAxis, 0.005);
 	}
 }
 

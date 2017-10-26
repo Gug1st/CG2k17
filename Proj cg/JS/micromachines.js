@@ -56,7 +56,7 @@ function addButters(numberButters) {
 	}
 
 	for (i=0; i<numberButters; i++){
-		mapButters[i].createButter(getRandomInt(-70, 70), 0, getRandomInt(-50, 50));
+		mapButters[i].createButter(getRandomInt(-70, 70), 0, getRandomInt(-70, 70));
 		mapButters[i].butterBoundingSphere();
 	}
 }
@@ -294,13 +294,14 @@ function addLostOranges(){
 	var index;
 	if (stackLostOranges.length > 2){
 		index = stackLostOranges.pop();
-		mapOranges[index].changePosition(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
+		mapOranges[index].changePosition(getRandomInt(-70, 70), -1, getRandomInt(-70, 70));
 		scene.add(mapOranges[index].obj);
 	}	
 }
 
 function checkTimer(){
 	var i;
+	// quando passarem 5 segundos, aumenta a velocidade das laranjas
 	if ((clock.elapsedTime - timer) > 5){
 		timer = clock.elapsedTime;
 
@@ -350,7 +351,7 @@ function render() {
 
 function animate() {
 	'use strict';
-
+	// adiciona laranjas aleatoriamente
 	addLostOranges();
 
 	checkTimer();
@@ -361,6 +362,7 @@ function animate() {
 
 	checkCollisions();
 	//updateChaseCam();
+	// verificar se ha laranjas que sairam da mesa
 	checkTableBounderings();
 
 	render();
