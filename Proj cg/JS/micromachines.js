@@ -40,7 +40,7 @@ function addOranges(numberOranges) {
 	}
 
 	for (i=0; i<numberOranges; i++){
-		mapOranges[i].createOrange(getRandomInt(-70, 70), -1, getRandomInt(-70, 70));
+		mapOranges[i].createOrange(getRandomInt(-70, 70), 1, getRandomInt(-70, 70));
 		mapOranges[i].orangeBoundingSphere();
 	}
 }
@@ -85,7 +85,7 @@ function addBorders() {
 			mapCheerios[j+3].cheerioBoundingSphere();
 		}
 	}
-	
+
 	for (j=84; j<200; j++){
 
 		for (i=0; i<29; i++){
@@ -164,7 +164,7 @@ function createRing(x, y, z) {
 function createCameras() {
 	'use strict';
 	// Orthographic Camera (Top View) - OrthographicCamera( left, right, top, bottom, near, far )
-	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - cameraFactor, frustumSize * aspect / cameraFactor, 
+	cameraOrthographic = new THREE.OrthographicCamera( frustumSize * aspect / - cameraFactor, frustumSize * aspect / cameraFactor,
 		frustumSize / cameraFactor, frustumSize / - cameraFactor, 1, 2000 );
 	cameraOrthographic.position.y = 400;
 	cameraOrthographic.lookAt(scene.position);
@@ -207,7 +207,7 @@ function checkOrangeCollisions() {
 	var x1, x2, x3;
 	var z1, z2, z3;
 	var distance, dSquare;
-	
+
 	for (var i = 0; i<mapOranges.length; i++){
 		// colisao para a laranja?
 		//teorema de pitagoras?
@@ -236,12 +236,12 @@ function checkOrangeCollisions() {
 
 function checkButterCollisions() {
 	'use strict';
-	
+
 	var i;
 	var x1, x2, x3;
 	var z1, z2, z3;
 	var distance, dSquare;
-	
+
 	for (i = 0; i <mapButters.length; i++){
 		// colisao para a laranja?
 		//teorema de pitagoras?
@@ -264,9 +264,9 @@ function checkButterCollisions() {
 		dSquare = Math.sqrt(distance);
 
 		if (dSquare < mapButters[i].BSphere.radius + car.BSphere.radius) {
-			if (car.lastPressed == "f") 
+			if (car.lastPressed == "f")
 				car.cantMove = "f";
-			else if (car.lastPressed == "b") 
+			else if (car.lastPressed == "b")
 				car.cantMove = "b";
 			car.inside = i;
 			break;
@@ -275,12 +275,12 @@ function checkButterCollisions() {
 }
 
 function checkButterOutside(butterid) {
-	
+
 	var i;
 	var x1, x2, x3;
 	var z1, z2, z3;
 	var distance, dSquare;
-	
+
 		// colisao para a laranja?
 		//teorema de pitagoras?
 		x1 = car.obj.position.x;
@@ -314,8 +314,8 @@ function checkTableBounderings(){
 		if (mapOranges[i].obj.position.z > 71){
 			stackLostOranges.push(i);
 			scene.remove(mapOranges[i].obj);
-			/*altero a posicao da laranja nos eixos dos zz para 0 
-			para quando voltar a ver quais as laranjas que passaram os limites, 
+			/*altero a posicao da laranja nos eixos dos zz para 0
+			para quando voltar a ver quais as laranjas que passaram os limites,
 			a mesma que já foi vista nao ser adicionada novamente a pilha*/
 			mapOranges[i].obj.position.z = 0;
 		}
@@ -324,11 +324,11 @@ function checkTableBounderings(){
 
 function addLostOranges(){
 	var index;
-	/* Se mais de 2 laranjas ja tiverem saido da mesa, 
+	/* Se mais de 2 laranjas ja tiverem saido da mesa,
 	adiciona uma laranja numa posicao aleatoria*/
 	if (stackLostOranges.length > 1){
 		index = stackLostOranges.pop();
-		mapOranges[index].changePosition(getRandomInt(-70, 70), -1, getRandomInt(-70, 70));
+		mapOranges[index].changePosition(getRandomInt(-70, 70), 1, getRandomInt(-70, 70));
 		scene.add(mapOranges[index].obj);
 	}
 }
@@ -357,7 +357,7 @@ function checkCollisions(){
 	checkOrangeCollisions();
 	if (car.inside == -1)
 		checkButterCollisions();
-	else 
+	else
 		checkButterOutside(car.inside);
 }
 

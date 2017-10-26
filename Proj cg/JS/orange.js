@@ -1,51 +1,68 @@
 /*
 / Construtor da laranja
-/ 
+/
 / currentVel = velocidade atual da laranja
-/ 
+/
 */
 
 class orange{
-	
+
 	constructor() {
 		this.currentVel = 0.03;
 		this.obj = new THREE.Object3D();
 		this.BSphere;
 	}
 
-	/*
-	/ Funcao change position, para alterar a posicao da laranja
-	*/	
-	changePosition(x, y, z) {	
+
+	addOrange(){
 		'use strict';
-		this.obj.position.set(x, y, z);
+		material = new THREE.MeshBasicMaterial({color: 0xffa500 });
+		geometry = new THREE.SphereGeometry(1, 10, 10);
+		mesh = new THREE.Mesh(geometry, material);
+		this.obj.add(mesh);
 	}
+
+	addCaule(){
+		'use strict';
+		geometry = new THREE.CylinderGeometry( 0.1, 0.1, 1, 8, 1);
+		material = new THREE.MeshBasicMaterial( {color: 0x006400} );
+		mesh = new THREE.Mesh( geometry, material );
+		mesh.position.set(0, 1, 0);
+		this.obj.add(mesh);
+	}
+
+	addFolha(){
+		'use strict';
+		geometry = new THREE.CircleGeometry( 1, 2, 2, 1 );
+		material = new THREE.MeshBasicMaterial( { color: 0x006400 } );
+		mesh = new THREE.Mesh( geometry,material );
+		mesh.position.set(0, 1, 0);
+		mesh.rotateX(1.2);
+		this.obj.add(mesh);
+	}
+
 
 	createOrange(x, y, z) {
 		'use strict';
-
-		material = new THREE.MeshBasicMaterial({ wireframe: false, color: 0xffa500 });
-		geometry = new THREE.SphereGeometry(2, 10, 10);
-		mesh = new THREE.Mesh(geometry, material);
-
-		this.obj.add(mesh);
-
-		/*folha
-
-		var leafGeometry = new THREE.PlaneGeometry( 1, 5, 32);
-		var leafMaterial = new THREE.MeshBasicMaterial( {color: 0x32CD32, side: THREE.DoubleSide} );
-		var leafMesh = new THREE.Mesh( geometry, material );
-
-		leafMesh.position.set(x, y, z);
-		this.obj.add(leafMesh);*/
-
+		this.addOrange();
+		this.addCaule(); // position in orange axis
+		this.addFolha(); // position in orange axis
 		this.obj.position.set(x, y, z);
-
 		scene.add(this.obj);
 	}
 
+	/*
+	/ Funcao change position, para alterar a posicao da laranja
+	*/
+	changePosition(x, y, z) {
+		'use strict';
+		this.obj.position.set(x, y, z);
+	}
+
+
+
 	orangeBoundingSphere() {
-		this.BSphere = new THREE.Sphere(this.obj.position, 2);
+		this.BSphere = new THREE.Sphere(this.obj.position, 1);
 		//this.obj.children[0].geometry.computeBoundingSphere();
 	}
 
@@ -65,32 +82,3 @@ class orange{
 		this.obj.rotateOnAxis(zAxis, 0.005);
 	}
 }
-
-/* function changePosition(orange, x, y, z) {	
-	'use strict';
-
-	orange.obj.position.set(x, y, z);
-}
-
-
-function createOrange(orange, x, y, z) {
-	'use strict';
-
-	orange.obj = new THREE.Object3D();
-	material = new THREE.MeshBasicMaterial({ wireframe: false, color: 0xffa500 });
-	geometry = new THREE.SphereGeometry(2, 10, 10);
-	mesh = new THREE.Mesh(geometry, material);
-
-	orange.obj.add(mesh);
-
-	//orange.obj.geometry.computeBoundingSphere();
-	//geometry.computeBoundingSphere();
-
-	orange.obj.position.set(x, y, z);
-
-	scene.add(orange);
-}
-
-function increaseSpeed(orange){
-
-}*/
