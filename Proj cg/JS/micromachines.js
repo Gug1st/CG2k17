@@ -33,13 +33,10 @@ function getRandomInt(min, max) {
  * Adds (numberOranges) between the min and max values randomly
  */
 function addOranges(numberOranges) {
-
 	var i;
+
 	for (i=0; i<numberOranges; i++){
 		mapOranges[i] = new orange();
-	}
-
-	for (i=0; i<numberOranges; i++){
 		mapOranges[i].createOrange(getRandomInt(-70, 70), 1, getRandomInt(-70, 70));
 		mapOranges[i].orangeBoundingSphere();
 	}
@@ -49,13 +46,10 @@ function addOranges(numberOranges) {
  * Adds (numberButters) between the min and max values randomly
  */
 function addButters(numberButters) {
-
 	var i;
+
 	for (i=0; i<numberButters; i++){
 		mapButters[i] = new butter();
-	}
-
-	for (i=0; i<numberButters; i++){
 		mapButters[i].createButter(getRandomInt(-70, 70), 0, getRandomInt(-50, 50));
 		mapButters[i].butterBoundingSphere();
 	}
