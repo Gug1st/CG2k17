@@ -87,6 +87,6 @@ class orange{
 
 		this.obj.position.z += this.currentVel;
 		// roda sobre si propria
-		this.obj.rotateOnAxis(zAxis, 0.005);
+		this.obj.rotateOnAxis(xAxis, 0.05);
 	}
 }
