@@ -8,7 +8,7 @@
 class orange{
 	
 	constructor() {
-		this.currentVel = 0;
+		this.currentVel = 0.03;
 		this.obj = new THREE.Object3D();
 		this.collision = false;
 		this.BSphere;
@@ -41,12 +41,12 @@ class orange{
 	}
 
 	increaseSpeed() {
-		this.obj.currentVel +=  0.005;
+		this.currentVel +=  0.05;
 
 	}
 
 	movement() {
-		this.obj.translateZ(this.obj.currentVel);
+		this.obj.translateZ(this.currentVel);
 	}
 }
 

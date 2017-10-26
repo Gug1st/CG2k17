@@ -274,13 +274,13 @@ function checkButterCollisions() {
 	}
 }
 
-/*function checkTimer(){
+function checkTimer(){
 	var i;
-	if ((clock.elapsedTime - timer) > 5000){
+	if ((clock.elapsedTime - timer) > 10){
 		timer = clock.elapsedTime;
 
 		for (i=0; i<NUM_ORANGES; i++){
-			mapOranges[i].increaseVel();
+			mapOranges[i].increaseSpeed();
 		}
 	}
 }
@@ -290,7 +290,7 @@ function moveOranges(){
 	for (i=0;i<NUM_ORANGES; i++){
 		mapOranges[i].movement();
 	}
-}*/
+}
 
 function checkCollisions(){
 	'use strict';
@@ -325,8 +325,8 @@ function render() {
 function animate() {
 	'use strict';
 
-	//checkTimer();
-	//moveOranges();
+	checkTimer();
+	moveOranges();
 
 	car.calcVelocity();
 	car.movement();
