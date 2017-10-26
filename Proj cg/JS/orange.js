@@ -36,14 +36,18 @@ class orange{
 		scene.add(this.obj);
 	}
 
-	increaseSpeed(){
-
-	}
-
-	orangeBoundingSphere(){
+	orangeBoundingSphere() {
 		this.BSphere = new THREE.Sphere(this.obj.position, 2);
 	}
 
+	increaseSpeed() {
+		this.obj.currentVel +=  0.005;
+
+	}
+
+	movement() {
+		this.obj.translateZ(this.obj.currentVel);
+	}
 }
 
 /* function changePosition(orange, x, y, z) {	

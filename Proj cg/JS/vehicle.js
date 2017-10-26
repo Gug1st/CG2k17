@@ -18,7 +18,8 @@ class vehicle {
 		this.pedalSwitch = 0.1;
 		this.lastPressed = "";
 		this.obj = new THREE.Object3D();
-		this.collision = false;
+		//this.collisionOrange = false;
+		//this.collisionButter = false;
 		this.BSphere;
 		this.cantMove = "";
 	}

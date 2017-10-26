@@ -9,11 +9,12 @@ var geometry, material, mesh;
 var aspect = window.innerWidth / window.innerHeight;
 
 var clock, delta;
+var timer = 0;
 
 var map = {37: false, 38: false, 39: false, 40: false};
 var mapOranges = {};
 var mapButters = {};
-var mapCheerios = {};
+//var mapCheerios = {};
 
 var frustumSize = 1000; cameraFactor = 10;
 var lastPressed, lastCamera;
@@ -61,7 +62,7 @@ function addButters(numberButters) {
 
 function addBorders() {
 	'use strict';
-	var i, j;
+	/*var i, j;
 
 	for (j=0; j<84; j++){
 
@@ -103,9 +104,9 @@ function addBorders() {
 			mapCheerios[j+2].cheerioBoundingSphere();
 			mapCheerios[j+3].cheerioBoundingSphere();
 		}
-	}
+	}*/
 
-	/*for(var i=0; i < 21; i++) {
+	for(var i=0; i < 21; i++) {
 		createRing(48-i*4.5, 0, 53);
 		createRing(47.5-i*4.8, 0, -52.5);
 		createRing(48, 0, 53-i*5);
@@ -116,7 +117,7 @@ function addBorders() {
 		createRing(70-i*4.84, 0, -69.5);
 		createRing(70, 0, 70.5-i*5);
 		createRing(-70, 0, 70.5-i*5);
-	}*/
+	}
 }
 
 function addTable(obj, x, y, z) {
@@ -136,7 +137,7 @@ function createTable(x, y, z) {
 	addBorders();
 }
 
-/*function createRing(x, y, z) {
+function createRing(x, y, z) {
 	'use strict';
 
 	var ring = new THREE.Object3D();
@@ -153,7 +154,7 @@ function createTable(x, y, z) {
 	ring.children[0].geometry.computeBoundingSphere();
 
 	scene.add(ring);
-}*/
+}
 
 /**
  * CombinedCamera(width, height, fov, near, far, orthoNear, orthoFar)
@@ -229,6 +230,7 @@ function checkOrangeCollisions() {
 		dSquare = Math.sqrt(distance);
 
 		if (dSquare < (mapOranges[i].BSphere.radius + car.BSphere.radius))
+			//car.collisionOrange = true;
 			car.changePosition(61, 1, 37);
 	}
 }
@@ -263,6 +265,7 @@ function checkButterCollisions() {
 		dSquare = Math.sqrt(distance);
 
 		if (dSquare < (mapButters[i].BSphere.radius + car.BSphere.radius)) {
+			//car.collisionButter = true;
 			if (car.lastPressed == "f") 
 				car.cantMove = "f";
 			else if (car.lastPressed == "b") 
@@ -270,6 +273,24 @@ function checkButterCollisions() {
 		}
 	}
 }
+
+/*function checkTimer(){
+	var i;
+	if ((clock.elapsedTime - timer) > 5000){
+		timer = clock.elapsedTime;
+
+		for (i=0; i<NUM_ORANGES; i++){
+			mapOranges[i].increaseVel();
+		}
+	}
+}
+
+function moveOranges(){
+	var i;
+	for (i=0;i<NUM_ORANGES; i++){
+		mapOranges[i].movement();
+	}
+}*/
 
 function checkCollisions(){
 	'use strict';
@@ -289,17 +310,30 @@ function render() {
 	else if (lastCamera == 3){
 		renderer.render(scene, cameraDriver);
 	}
-	else if(car.collision == true){
-		//
+	/*else if(car.collisionOrange == true){
+		car.changePosition(61, 1, 37);
 	}
+	else if(car.collisionButter == true){
+		if (car.lastPressed == "f") 
+			car.cantMove = "f";
+		else if (car.lastPressed == "b") 
+			car.cantMove = "b";
+	}*/
+
 }
 
 function animate() {
 	'use strict';
+
+	//checkTimer();
+	//moveOranges();
+
 	car.calcVelocity();
 	car.movement();
+
 	checkCollisions();
 	//updateChaseCam();
+
 	render();
 	requestAnimationFrame(animate);
 
