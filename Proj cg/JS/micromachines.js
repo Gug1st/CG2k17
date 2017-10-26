@@ -10,10 +10,12 @@ var aspect = window.innerWidth / window.innerHeight;
 
 var clock, delta;
 var timer = 0;
+var timerLostOranges = 0;
 
 var map = {37: false, 38: false, 39: false, 40: false};
-var mapOranges = {};
-var mapButters = {};
+var mapOranges = [];
+var mapButters = [];
+var mapLostOranges = [];
 //var mapCheerios = {};
 
 var frustumSize = 1000; cameraFactor = 10;
@@ -208,7 +210,7 @@ function checkOrangeCollisions() {
 	var z1, z2, z3;
 	var distance, dSquare;
 	
-	for (var i = 0; i < NUM_ORANGES; i++){
+	for (var i = 0; i<mapOranges.length; i++){
 		// colisao para a laranja?
 		//teorema de pitagoras?
 		x1 = car.obj.position.x;
@@ -243,7 +245,7 @@ function checkButterCollisions() {
 	var z1, z2, z3;
 	var distance, dSquare;
 	
-	for (i = 0; i < NUM_BUTTERS; i++){
+	for (i = 0; i <mapButters.length; i++){
 		// colisao para a laranja?
 		//teorema de pitagoras?
 		x1 = car.obj.position.x;
@@ -274,12 +276,35 @@ function checkButterCollisions() {
 	}
 }
 
+function checkTableBounderings(){
+	var i;
+	for (i=0; i<mapOranges.length; i++){
+		if (mapOranges[i].obj.position.z > 71){
+			mapLostOranges.push(i);
+			scene.remove(mapOranges[i].obj);
+			mapOranges[i].obj.position.z = 0;
+			//mapOranges[i].changePosition(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
+		}
+	}
+}
+
+function addLostOranges(){
+	var index;
+
+		if (mapLostOranges.length > 0){
+			var index = mapLostOranges.pop();
+			mapOranges[index].changePosition(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
+			scene.add(mapOranges[index].obj);
+		}
+	}
+}
+
 function checkTimer(){
 	var i;
-	if ((clock.elapsedTime - timer) > 10){
+	if ((clock.elapsedTime - timer) > 5){
 		timer = clock.elapsedTime;
 
-		for (i=0; i<NUM_ORANGES; i++){
+		for (i=0; i<mapOranges.length; i++){
 			mapOranges[i].increaseSpeed();
 		}
 	}
@@ -287,7 +312,7 @@ function checkTimer(){
 
 function moveOranges(){
 	var i;
-	for (i=0;i<NUM_ORANGES; i++){
+	for (i=0;i<mapOranges.length; i++){
 		mapOranges[i].movement();
 	}
 }
@@ -310,6 +335,7 @@ function render() {
 	else if (lastCamera == 3){
 		renderer.render(scene, cameraDriver);
 	}
+
 	/*else if(car.collisionOrange == true){
 		car.changePosition(61, 1, 37);
 	}
@@ -327,12 +353,14 @@ function animate() {
 
 	checkTimer();
 	moveOranges();
+	addLostOranges();
 
 	car.calcVelocity();
 	car.movement();
 
 	checkCollisions();
 	//updateChaseCam();
+	checkTableBounderings();
 
 	render();
 	requestAnimationFrame(animate);
