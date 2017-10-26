@@ -20,6 +20,7 @@ class vehicle {
 		this.obj = new THREE.Object3D();
 		this.BSphere;
 		this.cantMove = "";
+		this.inside = -1;
 	}
 
 	/*

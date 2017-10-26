@@ -263,13 +263,48 @@ function checkButterCollisions() {
 		distance = (x3*x3) + (z3*z3);
 		dSquare = Math.sqrt(distance);
 
-		if (dSquare < (mapButters[i].BSphere.radius + car.BSphere.radius)) {
+		if (dSquare < mapButters[i].BSphere.radius + car.BSphere.radius) {
 			if (car.lastPressed == "f") 
 				car.cantMove = "f";
 			else if (car.lastPressed == "b") 
 				car.cantMove = "b";
+			car.inside = i;
+			break;
 		}
 	}
+}
+
+function checkButterOutside(butterid) {
+	
+	var i;
+	var x1, x2, x3;
+	var z1, z2, z3;
+	var distance, dSquare;
+	
+		// colisao para a laranja?
+		//teorema de pitagoras?
+		x1 = car.obj.position.x;
+		x2 = mapButters[butterid].obj.position.x;
+		z1 = car.obj.position.z;
+		z2 = mapButters[butterid].obj.position.z;
+
+		if (x1 > x2)
+			x3 = x1 - x2;
+		else
+			x3 = x2 - x1;
+
+		if (z1 > z2)
+			z3 = z1 - z2;
+		else
+			z3 = z2 - z1;
+
+		distance = (x3*x3) + (z3*z3);
+		dSquare = Math.sqrt(distance);
+
+		if (dSquare >= mapButters[butterid].BSphere.radius + car.BSphere.radius) {
+			car.cantMove = "";
+			car.inside = -1;
+		}
 }
 
 function checkTableBounderings(){
@@ -320,7 +355,10 @@ function moveOranges(){
 function checkCollisions(){
 	'use strict';
 	checkOrangeCollisions();
-	checkButterCollisions();
+	if (car.inside == -1)
+		checkButterCollisions();
+	else 
+		checkButterOutside(car.inside);
 }
 
 function render() {
