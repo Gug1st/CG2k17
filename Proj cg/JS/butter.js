@@ -34,7 +34,8 @@ class butter {
 	}
 
 	butterBoundingSphere(){
-		this.BSphere = new THREE.Sphere(this.obj.position, 3.36);
+		this.BSphere = new THREE.Sphere(this.obj.position, 3.35);
+		//this.obj.children[0].geometry.computeBoundingSphere();
 	}
 
 }

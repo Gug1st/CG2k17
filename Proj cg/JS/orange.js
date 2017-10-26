@@ -46,6 +46,7 @@ class orange{
 
 	orangeBoundingSphere() {
 		this.BSphere = new THREE.Sphere(this.obj.position, 2);
+		//this.obj.children[0].geometry.computeBoundingSphere();
 	}
 
 	increaseSpeed() {
@@ -57,11 +58,11 @@ class orange{
 	}
 
 	movement() {
-		var yAxis = new THREE.Vector3(0, 0, 1);
+		var zAxis = new THREE.Vector3(0, 0, 1);
 
 		this.obj.translateZ(this.currentVel);
 		// roda sobre si propria
-		this.obj.rotateOnAxis(yAxis, 0.005);
+		this.obj.rotateOnAxis(zAxis, 0.005);
 	}
 }
 

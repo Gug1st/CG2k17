@@ -40,7 +40,7 @@ function addOranges(numberOranges) {
 	}
 
 	for (i=0; i<numberOranges; i++){
-		mapOranges[i].createOrange(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
+		mapOranges[i].createOrange(getRandomInt(-70, 70), -1, getRandomInt(-70, 70));
 		mapOranges[i].orangeBoundingSphere();
 	}
 }
@@ -56,7 +56,7 @@ function addButters(numberButters) {
 	}
 
 	for (i=0; i<numberButters; i++){
-		mapButters[i].createButter(getRandomInt(-70, 70), 0, getRandomInt(-70, 70));
+		mapButters[i].createButter(getRandomInt(-70, 70), 0, getRandomInt(-50, 50));
 		mapButters[i].butterBoundingSphere();
 	}
 }
@@ -230,7 +230,6 @@ function checkOrangeCollisions() {
 		dSquare = Math.sqrt(distance);
 
 		if (dSquare < (mapOranges[i].BSphere.radius + car.BSphere.radius))
-			//car.collisionOrange = true;
 			car.changePosition(61, 1, 37);
 	}
 }
@@ -265,7 +264,6 @@ function checkButterCollisions() {
 		dSquare = Math.sqrt(distance);
 
 		if (dSquare < (mapButters[i].BSphere.radius + car.BSphere.radius)) {
-			//car.collisionButter = true;
 			if (car.lastPressed == "f") 
 				car.cantMove = "f";
 			else if (car.lastPressed == "b") 
@@ -281,22 +279,23 @@ function checkTableBounderings(){
 		if (mapOranges[i].obj.position.z > 71){
 			stackLostOranges.push(i);
 			scene.remove(mapOranges[i].obj);
-			/*setting position to 0 so that everytime we check 
-			if theres an orange out of the table bounderings, 
-			this one doesnt add up more than once*/
+			/*altero a posicao da laranja nos eixos dos zz para 0 
+			para quando voltar a ver quais as laranjas que passaram os limites, 
+			a mesma que já foi vista nao ser adicionada novamente a pilha*/
 			mapOranges[i].obj.position.z = 0;
-			//mapOranges[i].changePosition(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
 		}
 	}
 }
 
 function addLostOranges(){
 	var index;
-	if (stackLostOranges.length > 2){
+	/* Se mais de 2 laranjas ja tiverem saido da mesa, 
+	adiciona uma laranja numa posicao aleatoria*/
+	if (stackLostOranges.length > 1){
 		index = stackLostOranges.pop();
 		mapOranges[index].changePosition(getRandomInt(-70, 70), -1, getRandomInt(-70, 70));
 		scene.add(mapOranges[index].obj);
-	}	
+	}
 }
 
 function checkTimer(){
@@ -313,7 +312,6 @@ function checkTimer(){
 
 function moveOranges(){
 	var i;
-
 	for (i=0;i<mapOranges.length; i++){
 		mapOranges[i].movement();
 	}
@@ -337,16 +335,6 @@ function render() {
 	else if (lastCamera == 3){
 		renderer.render(scene, cameraDriver);
 	}
-	/*else if(car.collisionOrange == true){
-		car.changePosition(61, 1, 37);
-	}
-	else if(car.collisionButter == true){
-		if (car.lastPressed == "f") 
-			car.cantMove = "f";
-		else if (car.lastPressed == "b") 
-			car.cantMove = "b";
-	}*/
-
 }
 
 function animate() {
