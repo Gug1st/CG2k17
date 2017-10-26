@@ -10,6 +10,7 @@ var aspect = window.innerWidth / window.innerHeight;
 
 var clock, delta;
 var timer = 0;
+var timerChanger = 0;
 
 var map = {37: false, 38: false, 39: false, 40: false};
 var mapOranges = [];
@@ -244,7 +245,7 @@ function checkOrangeCollisions() {
 	}
 }
 
-function checkButterCollisions() {
+function checkCheerioCollisions() {
 	'use strict';
 
 	var i;
@@ -252,8 +253,44 @@ function checkButterCollisions() {
 	var z1, z2, z3;
 	var distance, dSquare;
 
+	for (i = 0; i <mapCheerios.length; i++){
+		//teorema de pitagoras?
+		x1 = car.obj.position.x;
+		x2 = mapCheerios[i].obj.position.x;
+		z1 = car.obj.position.z;
+		z2 = mapCheerios[i].obj.position.z;
+
+		if (x1 > x2)
+			x3 = x1 - x2;
+		else
+			x3 = x2 - x1;
+
+		if (z1 > z2)
+			z3 = z1 - z2;
+		else
+			z3 = z2 - z1;
+
+		distance = (x3*x3) + (z3*z3);
+		dSquare = Math.sqrt(distance);
+
+		if (dSquare < mapCheerios[i].BSphere.radius + car.BSphere.radius) {
+			if (car.lastPressed == "f")
+				car.cantMove = "f";
+			else if (car.lastPressed == "b")
+				car.cantMove = "b";
+			car.inside = i;
+			break;
+		}
+	}
+}
+
+function checkButterCollisions(){
+	var i;
+	var x1, x2, x3;
+	var z1, z2, z3;
+	var distance, dSquare;
+
 	for (i = 0; i <mapButters.length; i++){
-		// colisao para a laranja?
 		//teorema de pitagoras?
 		x1 = car.obj.position.x;
 		x2 = mapButters[i].obj.position.x;
@@ -357,14 +394,26 @@ function checkTimer(){
 
 function moveOranges(){
 	var i;
-	for (i=0;i<mapOranges.length; i++){
-		mapOranges[i].movement();
+
+	if ((clock.elapsedTime - timerChanger) >= 8){
+		timerChanger = clock.elapsedTime;
+
+		for (i=0; i<mapOranges.length; i++)
+			mapOranges[i].movementXX();
+	}
+	else {
+		for (i=0; i<mapOranges.length; i++){
+			mapOranges[i].movementZZ();	
+		}
 	}
 }
 
 function checkCollisions(){
 	'use strict';
+
+	checkCheerioCollisions();
 	checkOrangeCollisions();
+
 	if (car.inside == -1)
 		checkButterCollisions();
 	else
