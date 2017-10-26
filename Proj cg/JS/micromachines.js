@@ -15,7 +15,7 @@ var map = {37: false, 38: false, 39: false, 40: false};
 var mapOranges = [];
 var mapButters = [];
 var stackLostOranges = [];
-//var mapCheerios = {};
+var mapCheerios = [];
 
 var frustumSize = 1000; cameraFactor = 10;
 var lastPressed, lastCamera;
@@ -63,51 +63,67 @@ function addButters(numberButters) {
 
 function addBorders() {
 	'use strict';
-	/*var i, j;
+	var i, j=0;
 
-	for (j=0; j<84; j++){
+	// i = 21
+	for (i=0; i<21; i++){
+		mapCheerios[j] = new cheerio();
+		mapCheerios[j].createCheerio(48-i*4.5, 0, 53);
+		mapCheerios[j].cheerioBoundingSphere();
+		j++;
+	}
+	for (i=0; i<21; i++){
 
-		for (i=0; i<21; i++){
+		mapCheerios[j] = new cheerio();
+		mapCheerios[j].createCheerio(47.5-i*4.8, 0, -52.5);
+		mapCheerios[j].cheerioBoundingSphere();
+		j++;
+	}
+	for (i=0; i<21; i++){
 
-			mapCheerios[j] = new cheerio();
-			mapCheerios[j+1] = new cheerio();
-			mapCheerios[j+2] = new cheerio();
-			mapCheerios[j+3] = new cheerio();
+		mapCheerios[j] = new cheerio();
+		mapCheerios[j].createCheerio(48, 0, 53-i*5);
+		mapCheerios[j].cheerioBoundingSphere();
+		j++;
+	}
+	for (i=0; i<21; i++){
 
-			mapCheerios[j].createCheerio(48-i*4.5, 0, 53);
-			mapCheerios[j+1].createCheerio(47.5-i*4.8, 0, -52.5);
-			mapCheerios[j+2].createCheerio(48, 0, 53-i*5);
-			mapCheerios[j+3].createCheerio(-48, 0, 53-i*5);
+		mapCheerios[j] = new cheerio();
+		mapCheerios[j].createCheerio(-48, 0, 53-i*5);
+		mapCheerios[j].cheerioBoundingSphere();
+		j++;
+	}
+	// i = 29
+	for (i=0; i<29; i++){
 
-			mapCheerios[j].cheerioBoundingSphere();
-			mapCheerios[j+1].cheerioBoundingSphere();
-			mapCheerios[j+2].cheerioBoundingSphere();
-			mapCheerios[j+3].cheerioBoundingSphere();
-		}
+		mapCheerios[j] = new cheerio();
+		mapCheerios[j].createCheerio(70-i*4.84, 0, 70.5);
+		mapCheerios[j].cheerioBoundingSphere();
+		j++;
+	}
+	for (i=0; i<29; i++){
+
+		mapCheerios[j] = new cheerio();
+		mapCheerios[j].createCheerio(70-i*4.84, 0, -69.5);
+		mapCheerios[j].cheerioBoundingSphere();
+		j++;
+	}
+	for (i=0; i<29; i++){
+
+		mapCheerios[j] = new cheerio();
+		mapCheerios[j].createCheerio(70, 0, 70.5-i*5);
+		mapCheerios[j].cheerioBoundingSphere();
+		j++;
+	}
+	for (i=0; i<29; i++){
+
+		mapCheerios[j] = new cheerio();
+		mapCheerios[j].createCheerio(-70, 0, 70.5-i*5);
+		mapCheerios[j].cheerioBoundingSphere();
+		j++;
 	}
 
-	for (j=84; j<200; j++){
-
-		for (i=0; i<29; i++){
-
-			mapCheerios[j] = new cheerio();
-			mapCheerios[j+1] = new cheerio();
-			mapCheerios[j+2] = new cheerio();
-			mapCheerios[j+3] = new cheerio();
-
-			mapCheerios[j].createCheerio(70-i*4.84, 0, 70.5);
-			mapCheerios[j+1].createCheerio(70-i*4.84, 0, -69.5);
-			mapCheerios[j+2].createCheerio(70, 0, 70.5-i*5);
-			mapCheerios[j+3].createCheerio(-70, 0, 70.5-i*5);
-
-			mapCheerios[j].cheerioBoundingSphere();
-			mapCheerios[j+1].cheerioBoundingSphere();
-			mapCheerios[j+2].cheerioBoundingSphere();
-			mapCheerios[j+3].cheerioBoundingSphere();
-		}
-	}*/
-
-	for(var i=0; i < 21; i++) {
+	/*for(var i=0; i < 21; i++) {
 		createRing(48-i*4.5, 0, 53);
 		createRing(47.5-i*4.8, 0, -52.5);
 		createRing(48, 0, 53-i*5);
@@ -118,7 +134,7 @@ function addBorders() {
 		createRing(70-i*4.84, 0, -69.5);
 		createRing(70, 0, 70.5-i*5);
 		createRing(-70, 0, 70.5-i*5);
-	}
+	}*/
 }
 
 function addTable(obj, x, y, z) {
@@ -138,7 +154,7 @@ function createTable(x, y, z) {
 	addBorders();
 }
 
-function createRing(x, y, z) {
+/*function createRing(x, y, z) {
 	'use strict';
 
 	var ring = new THREE.Object3D();
@@ -155,7 +171,7 @@ function createRing(x, y, z) {
 	ring.children[0].geometry.computeBoundingSphere();
 
 	scene.add(ring);
-}
+}*/
 
 /**
  * CombinedCamera(width, height, fov, near, far, orthoNear, orthoFar)
