@@ -73,20 +73,12 @@ class orange{
 		this.currentVel += 0.009;
 
 	}
-
-	movementXX(){
-		var xAxis = new THREE.Vector3(1, 0, 0);
-
-		this.obj.position.x += this.currentVel;
-		// roda sobre si propria
-		this.obj.rotateOnAxis(xAxis, 0.005);
-	}
 	
-	movementZZ() {
+	movement() {
 		var zAxis = new THREE.Vector3(0, 0, 1);
 
 		this.obj.position.z += this.currentVel;
 		// roda sobre si propria
-		this.obj.rotateOnAxis(xAxis, 0.05);
+		this.obj.rotateOnAxis(zAxis, 0.05);
 	}
 }

@@ -1,4 +1,4 @@
-var NUM_ORANGES = 8;
+var NUM_ORANGES = 15;
 var NUM_BUTTERS = 8;
 
 var cameraOrthographic, cameraPerspective, cameraDriver, scene, renderer;
@@ -38,6 +38,8 @@ function addOranges(numberOranges) {
 
 	for (i=0; i<numberOranges; i++){
 		mapOranges[i] = new orange();
+		// adicionar uma velocidade aleatoria a cada laranja no intervalo entre 0.009 e 0.06
+		mapOranges[i].currentVel = Math.random() * (0.06 - 0.009) + 0.009;
 		mapOranges[i].createOrange(getRandomInt(-70, 70), 1, getRandomInt(-70, 70));
 		mapOranges[i].orangeBoundingSphere();
 	}
@@ -240,8 +242,10 @@ function checkOrangeCollisions() {
 		distance = (x3*x3) + (z3*z3);
 		dSquare = Math.sqrt(distance);
 
-		if (dSquare < (mapOranges[i].BSphere.radius + car.BSphere.radius))
+		if (dSquare < (mapOranges[i].BSphere.radius + car.BSphere.radius)){
 			car.changePosition(61, 1, 37);
+			car.currentVel = 0;
+		}
 	}
 }
 
@@ -274,11 +278,6 @@ function checkCheerioCollisions() {
 		dSquare = Math.sqrt(distance);
 
 		if (dSquare < mapCheerios[i].BSphere.radius + car.BSphere.radius) {
-			if (car.lastPressed == "f")
-				car.cantMove = "f";
-			else if (car.lastPressed == "b")
-				car.cantMove = "b";
-			car.inside = i;
 			break;
 		}
 	}
@@ -395,16 +394,8 @@ function checkTimer(){
 function moveOranges(){
 	var i;
 
-	if ((clock.elapsedTime - timerChanger) >= 8){
-		timerChanger = clock.elapsedTime;
-
-		for (i=0; i<mapOranges.length; i++)
-			mapOranges[i].movementXX();
-	}
-	else {
-		for (i=0; i<mapOranges.length; i++){
-			mapOranges[i].movementZZ();	
-		}
+	for (i=0; i<mapOranges.length; i++){
+		mapOranges[i].movement();	
 	}
 }
 
