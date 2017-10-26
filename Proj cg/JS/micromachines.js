@@ -10,12 +10,11 @@ var aspect = window.innerWidth / window.innerHeight;
 
 var clock, delta;
 var timer = 0;
-var timerLostOranges = 0;
 
 var map = {37: false, 38: false, 39: false, 40: false};
 var mapOranges = [];
 var mapButters = [];
-var mapLostOranges = [];
+var stackLostOranges = [];
 //var mapCheerios = {};
 
 var frustumSize = 1000; cameraFactor = 10;
@@ -194,7 +193,6 @@ function createScene() {
 	car = new vehicle();
 	car.createCar(0, 0, 0);
 	car.changePosition(61, 1, 37);
-
 	car.vehicleBoundingSphere();
 
 	// Driver Camera (Chase Camera behind car View) - PerspectiveCamera( fov, aspect, near, far )
@@ -279,9 +277,13 @@ function checkButterCollisions() {
 function checkTableBounderings(){
 	var i;
 	for (i=0; i<mapOranges.length; i++){
+
 		if (mapOranges[i].obj.position.z > 71){
-			mapLostOranges.push(i);
+			stackLostOranges.push(i);
 			scene.remove(mapOranges[i].obj);
+			/*setting position to 0 so that everytime we check 
+			if theres an orange out of the table bounderings, 
+			this one doesnt add up more than once*/
 			mapOranges[i].obj.position.z = 0;
 			//mapOranges[i].changePosition(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
 		}
@@ -290,13 +292,11 @@ function checkTableBounderings(){
 
 function addLostOranges(){
 	var index;
-
-		if (mapLostOranges.length > 0){
-			var index = mapLostOranges.pop();
-			mapOranges[index].changePosition(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
-			scene.add(mapOranges[index].obj);
-		}
-	}
+	if (stackLostOranges.length > 2){
+		index = stackLostOranges.pop();
+		mapOranges[index].changePosition(getRandomInt(-70, 70), -1, getRandomInt(-50, 50));
+		scene.add(mapOranges[index].obj);
+	}	
 }
 
 function checkTimer(){
@@ -312,6 +312,7 @@ function checkTimer(){
 
 function moveOranges(){
 	var i;
+
 	for (i=0;i<mapOranges.length; i++){
 		mapOranges[i].movement();
 	}
@@ -319,13 +320,13 @@ function moveOranges(){
 
 function checkCollisions(){
 	'use strict';
-	
 	checkOrangeCollisions();
 	checkButterCollisions();
 }
 
 function render() {
 	'use strict';
+
 	if (lastCamera == 1) {
 		renderer.render(scene, cameraOrthographic);
 	}
@@ -335,7 +336,6 @@ function render() {
 	else if (lastCamera == 3){
 		renderer.render(scene, cameraDriver);
 	}
-
 	/*else if(car.collisionOrange == true){
 		car.changePosition(61, 1, 37);
 	}
@@ -351,9 +351,10 @@ function render() {
 function animate() {
 	'use strict';
 
+	addLostOranges();
+
 	checkTimer();
 	moveOranges();
-	addLostOranges();
 
 	car.calcVelocity();
 	car.movement();

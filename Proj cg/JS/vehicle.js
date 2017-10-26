@@ -29,7 +29,6 @@ class vehicle {
 	*/	
 	changePosition(x, y, z) {	
 		'use strict';
-	
 		this.obj.position.set(x, y, z);
 	}
 

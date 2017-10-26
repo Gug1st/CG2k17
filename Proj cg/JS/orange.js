@@ -3,15 +3,13 @@
 / 
 / currentVel = velocidade atual da laranja
 / 
-*/	
+*/
 
 class orange{
 	
 	constructor() {
-		this.currentVel = 0.09;
-		this.constVel = 0.2;
+		this.currentVel = 0.05;
 		this.obj = new THREE.Object3D();
-		this.collision = false;
 		this.BSphere;
 	}
 
@@ -20,7 +18,6 @@ class orange{
 	*/	
 	changePosition(x, y, z) {	
 		'use strict';
-
 		this.obj.position.set(x, y, z);
 	}
 
@@ -42,7 +39,7 @@ class orange{
 	}
 
 	increaseSpeed() {
-		this.currentVel += delta * this.constVel;
+		this.currentVel += 0.09;
 
 	}
 
