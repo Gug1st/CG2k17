@@ -65,28 +65,28 @@ function addBorders() {
 	// i = 21
 	for (i=0; i<21; i++){
 		mapCheerios[j] = new cheerio();
-		mapCheerios[j].createCheerio(48-i*4.5, 0, 53);
+		mapCheerios[j].createCheerio(48-i*4.5, 1, 53);
 		mapCheerios[j].cheerioBoundingSphere();
 		j++;
 	}
 	for (i=0; i<21; i++){
 
 		mapCheerios[j] = new cheerio();
-		mapCheerios[j].createCheerio(47.5-i*4.8, 0, -52.5);
+		mapCheerios[j].createCheerio(47.5-i*4.8, 1, -52.5);
 		mapCheerios[j].cheerioBoundingSphere();
 		j++;
 	}
 	for (i=0; i<21; i++){
 
 		mapCheerios[j] = new cheerio();
-		mapCheerios[j].createCheerio(48, 0, 53-i*5);
+		mapCheerios[j].createCheerio(48, 1, 53-i*5);
 		mapCheerios[j].cheerioBoundingSphere();
 		j++;
 	}
 	for (i=0; i<21; i++){
 
 		mapCheerios[j] = new cheerio();
-		mapCheerios[j].createCheerio(-48, 0, 53-i*5);
+		mapCheerios[j].createCheerio(-48, 1, 53-i*5);
 		mapCheerios[j].cheerioBoundingSphere();
 		j++;
 	}
@@ -94,44 +94,31 @@ function addBorders() {
 	for (i=0; i<29; i++){
 
 		mapCheerios[j] = new cheerio();
-		mapCheerios[j].createCheerio(70-i*4.84, 0, 70.5);
+		mapCheerios[j].createCheerio(70-i*4.84, 0.2, 70.5);
 		mapCheerios[j].cheerioBoundingSphere();
 		j++;
 	}
 	for (i=0; i<29; i++){
 
 		mapCheerios[j] = new cheerio();
-		mapCheerios[j].createCheerio(70-i*4.84, 0, -69.5);
+		mapCheerios[j].createCheerio(70-i*4.84, 0.2, -69.5);
 		mapCheerios[j].cheerioBoundingSphere();
 		j++;
 	}
 	for (i=0; i<29; i++){
 
 		mapCheerios[j] = new cheerio();
-		mapCheerios[j].createCheerio(70, 0, 70.5-i*5);
+		mapCheerios[j].createCheerio(70, 0.2, 70.5-i*5);
 		mapCheerios[j].cheerioBoundingSphere();
 		j++;
 	}
 	for (i=0; i<29; i++){
 
 		mapCheerios[j] = new cheerio();
-		mapCheerios[j].createCheerio(-70, 0, 70.5-i*5);
+		mapCheerios[j].createCheerio(-70, 0.2, 70.5-i*5);
 		mapCheerios[j].cheerioBoundingSphere();
 		j++;
 	}
-
-	/*for(var i=0; i < 21; i++) {
-		createRing(48-i*4.5, 0, 53);
-		createRing(47.5-i*4.8, 0, -52.5);
-		createRing(48, 0, 53-i*5);
-		createRing(-48, 0, 53-i*5);
-	}
-	for(i=0; i<29; i++) {
-		createRing(70-i*4.84, 0, 70.5);
-		createRing(70-i*4.84, 0, -69.5);
-		createRing(70, 0, 70.5-i*5);
-		createRing(-70, 0, 70.5-i*5);
-	}*/
 }
 
 function addTable(obj, x, y, z) {
@@ -151,29 +138,6 @@ function createTable(x, y, z) {
 	addBorders();
 }
 
-/*function createRing(x, y, z) {
-	'use strict';
-
-	var ring = new THREE.Object3D();
-
-	material = new THREE.MeshBasicMaterial({ color: 0x000000 });
-	geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
-	mesh = new THREE.Mesh(geometry, material);
-
-	ring.add(mesh);
-	ring.position.set(x, y, z);
-	ring.rotateX(1.4);
-
-	// ComputeBoundingSphere for the ring
-	ring.children[0].geometry.computeBoundingSphere();
-
-	scene.add(ring);
-}*/
-
-/**
- * CombinedCamera(width, height, fov, near, far, orthoNear, orthoFar)
- * Creates a CombinedCamera. This initializes 2 cameras, an OrthographicCamera and a PerspectiveCamera. The default is the perspective Camera.
- */
 function createCameras() {
 	'use strict';
 	// Orthographic Camera (Top View) - OrthographicCamera( left, right, top, bottom, near, far )
@@ -249,6 +213,8 @@ function checkOrangeCollisions() {
 	}
 }
 
+
+
 function checkCheerioCollisions() {
 	'use strict';
 
@@ -278,7 +244,9 @@ function checkCheerioCollisions() {
 		dSquare = Math.sqrt(distance);
 
 		if (dSquare < mapCheerios[i].BSphere.radius + car.BSphere.radius) {
-			break;
+			 mapCheerios[i].currentVel = car.currentVel;
+       mapCheerios[i].rotationAxis = car.rotationAxis;
+       mapCheerios[i].cheerioMovement();
 		}
 	}
 }
@@ -395,7 +363,7 @@ function moveOranges(){
 	var i;
 
 	for (i=0; i<mapOranges.length; i++){
-		mapOranges[i].movement();	
+		mapOranges[i].movement();
 	}
 }
 

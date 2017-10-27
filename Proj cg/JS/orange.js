@@ -67,13 +67,10 @@ class orange{
 	}
 
 	increaseSpeed() {
-		// mov rectilineo uniforme
-		// velocidades diferentes ??
-		//this.currentVel += getRandomInt(0.001, 0.005);
 		this.currentVel += 0.009;
 
 	}
-	
+
 	movement() {
 		var zAxis = new THREE.Vector3(0, 0, 1);
 

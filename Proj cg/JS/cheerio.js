@@ -1,23 +1,24 @@
 /*
 / Construtor do cheerio
-/ 
+/
 / currentVel = velocidade do cheerio
-/ 
-*/	
+/
+*/
 
 class cheerio{
-	
+
 	constructor() {
 		this.currentVel = 0;
 		this.obj = new THREE.Object3D();
 		this.collision = false;
 		this.BSphere;
+		this.rotationAxis = 0;
 	}
 
 	/*
 	/ Funcao change position, para alterar a posicao do cheerio
-	*/	
-	changePosition(x, y, z) {	
+	*/
+	changePosition(x, y, z) {
 		'use strict';
 		this.obj.position.set(x, y, z);
 	}
@@ -32,7 +33,6 @@ class cheerio{
 		this.obj.add(mesh);
 		this.obj.position.set(x, y, z);
 		this.obj.rotateX(1.4);
-
 		scene.add(this.obj);
 	}
 
@@ -40,4 +40,8 @@ class cheerio{
 		this.BSphere = new THREE.Sphere(this.obj.position, 0.8);
 	}
 
+	cheerioMovement() {
+		var yAxis = new THREE.Vector3(0, 1, 0);
+			this.obj.translateX(this.currentVel);
+		}
 }

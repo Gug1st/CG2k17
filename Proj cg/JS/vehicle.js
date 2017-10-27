@@ -1,16 +1,16 @@
 /*
 / Construtor do carro
-/ 
+/
 / maxVel = velocidade limite do carro
 / currentVel = velocidade atual do carro
 / consVel = velocidade
 / pedalSwitch = desacelaração ao virar
 / lastPressed = desacelaração ao trocar andar para a frente/tras
-/ 
-*/	
+/
+*/
 
 class vehicle {
-	
+
 	constructor() {
 		this.maxVel = 0.5;
 		this.currentVel = 0;
@@ -25,8 +25,8 @@ class vehicle {
 
 	/*
 	/ Funcao change position, para colocar o node do carro na pista
-	*/	
-	changePosition(x, y, z) {	
+	*/
+	changePosition(x, y, z) {
 		'use strict';
 		this.obj.position.set(x, y, z);
 	}
@@ -35,10 +35,10 @@ class vehicle {
 	/ addWheel
 	/
 	/ Funcao que cria as rodas do carro, juntando o material e a geometria ao mesh do carro (torus), na posicao xyz
-	*/	
+	*/
 	addWheel(x, y, z) {
 		'use strict';
-	
+
 		material = new THREE.MeshBasicMaterial({ color: 0x000000 });
 		geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
 		mesh = new THREE.Mesh(geometry, material);
@@ -52,10 +52,10 @@ class vehicle {
 	/ addLight
 	/
 	/ Funcao que cria as luzes do carro, juntando o material e a geometria ao mesh do carro (esfera), na posicao xyz
-	*/	
+	*/
 	addLight(x, y, z){
 		'use strict';
-	
+
 		geometry = new THREE.SphereGeometry(0.5,32,32);
 		material = new THREE.MeshBasicMaterial({ color: 0xFFFF00 });
 		mesh = new THREE.Mesh(geometry, material);
@@ -68,10 +68,10 @@ class vehicle {
 	/ addCar
 	/
 	/ Funcao que cria o carro, juntando o material e a geometria ao mesh do carro (cubo), na posicao xyz
-	*/	
+	*/
 	addCar(x, y, z) {
 		'use strict';
-	
+
 		geometry = new THREE.CubeGeometry(5, 2.5, 7);
 		mesh = new THREE.Mesh(geometry, material);
 		mesh.position.set(x, y, z);
@@ -87,7 +87,7 @@ class vehicle {
 	*/
 	createCar(x, y, z) {
 		'use strict';
-	
+
 		material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
 		this.addCar(x, y, z);
@@ -106,8 +106,6 @@ class vehicle {
 	vehicleBoundingSphere() {
 
 		this.BSphere = new THREE.Sphere(this.obj.position, 4.42);
-		/*for (var i = 0; i < this.obj.children.length; i++)
-	    	this.obj.children[i].geometry.computeBoundingSphere();*/
 	}
 
 
@@ -120,9 +118,9 @@ class vehicle {
 	*/
 	calcVelocity() {
 		'use strict';
-	
+
 		delta = clock.getDelta();
-	
+
 		if ((map[40] || map[38])) {
 			if (this.currentVel <= this.maxVel){
 				this.currentVel += delta * this.consVel;
@@ -150,9 +148,9 @@ class vehicle {
 	*/
 	movement() {
 		'use strict';
-		
+
 		var yAxis = new THREE.Vector3(0, 1, 0);
-	
+
 		if (map[38] && this.cantMove != "f"){
 			if (map[37])
 				this.obj.rotateOnAxis(yAxis, 0.05);
