@@ -21,6 +21,7 @@ var mapCheerios = [];
 var frustumSize = 1000; cameraFactor = 10;
 var lastPressed, lastCamera;
 
+var directionalLight;
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive)
@@ -171,6 +172,11 @@ function createScene() {
 	car.createCar(0, 0, 0);
 	car.changePosition(61, 1, 37);
 	car.vehicleBoundingSphere();
+	// add sun light
+	directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+	directionalLight.position.set(0,15,0);
+	directionalLight.target.position.set(0,0,0);
+	scene.add(directionalLight);
 
 	// Driver Camera (Chase Camera behind car View) - PerspectiveCamera( fov, aspect, near, far )
 	addOranges(NUM_ORANGES);
@@ -212,8 +218,6 @@ function checkOrangeCollisions() {
 		}
 	}
 }
-
-
 
 function checkCheerioCollisions() {
 	'use strict';
@@ -475,6 +479,16 @@ function onKeyDown(e) {
 
 	case 51: // 3 - Driver Camera
 		lastCamera=3;
+		break;
+
+	// sun light
+	case 78: //N
+	case 110: //n
+		// alternates between night and day
+		if (directionalLight.intensity > 0)
+			directionalLight.intensity = 0;
+		else
+			directionalLight.intensity = 1;
 		break;
 	}
 }
