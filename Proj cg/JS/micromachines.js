@@ -131,7 +131,10 @@ function addTable(obj, x, y, z) {
 function createTable(x, y, z) {
 	'use strict';
 	var table = new THREE.Object3D();
-	material = new THREE.MeshBasicMaterial({ color: 0x00cc66 });
+	var diffuseColor = new THREE.Color(0.33,0.72,0.0);
+	var specularColor = new THREE.Color(0.64,0.65,0.43);
+	phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+	lambertMaterial = new THREE.MeshLambertMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
 	addTable(table, x, y, z);
 	scene.add(table);
 	addBorders();

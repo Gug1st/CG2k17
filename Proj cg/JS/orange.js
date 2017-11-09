@@ -17,8 +17,10 @@ class orange{
 	addOrange(){
 		'use strict';
 		geometry = new THREE.SphereGeometry(1, 10, 10);
-		lambertMaterial = new THREE.MeshLambertMaterial({color: 0xffa500 });
-    phongMaterial = new THREE.MeshPhongMaterial({color: 0xffa500 });
+		var diffuseColor = new THREE.Color(1.0,0.45,0.0);
+		var specularColor = new THREE.Color(0.66,0.48,0.29);
+		phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+		lambertMaterial = new THREE.MeshLambertMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
 		mesh = new THREE.Mesh(geometry, lambertMaterial);
 		this.obj.add(mesh);
 	}
@@ -26,8 +28,10 @@ class orange{
 	addCaule(){
 		'use strict';
 		geometry = new THREE.CylinderGeometry( 0.1, 0.1, 1, 8, 1);
-		lambertMaterial = new THREE.MeshLambertMaterial({color: 0x006400});
-		phongMaterial = new THREE.MeshPhongMaterial({color: 0x006400});
+		var diffuseColor = new THREE.Color(0.25,0.19,0.0);
+		var specularColor = new THREE.Color(0.45,0.33,0.29);
+		phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+		lambertMaterial = new THREE.MeshLambertMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
 		mesh = new THREE.Mesh( geometry, lambertMaterial);
 		mesh.position.set(0, 1, 0);
 		this.obj.add(mesh);
@@ -36,8 +40,10 @@ class orange{
 	addFolha(){
 		'use strict';
 		geometry = new THREE.CircleGeometry( 1, 2, 2, 1 );
-		lambertMaterial = new THREE.MeshLambertMaterial({color: 0x006400});
-		phongMaterial = new THREE.MeshPhongMaterial({color: 0x006400});
+		var diffuseColor = new THREE.Color(0.0,1.0,0.0);
+		var specularColor = new THREE.Color(0.15,0.43,0.19);
+		phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+		lambertMaterial = new THREE.MeshLambertMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
 		mesh = new THREE.Mesh( geometry, lambertMaterial);
 		mesh.position.set(0, 1, 0);
 		mesh.rotateX(1.2);
@@ -75,10 +81,10 @@ class orange{
 	}
 
 	movement() {
-		var zAxis = new THREE.Vector3(0, 0, 1);
+		var xAxis = new THREE.Vector3(1, 0, 0);
 
 		this.obj.position.z += this.currentVel;
 		// roda sobre si propria
-		this.obj.rotateOnAxis(zAxis, 0.05);
+		this.obj.rotateOnAxis(xAxis, 0.05);
 	}
 }

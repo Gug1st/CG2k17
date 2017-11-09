@@ -38,8 +38,10 @@ class vehicle {
 	*/
 	addWheel(x, y, z) {
 		'use strict';
-		lambertMaterial = new THREE.MeshLambertMaterial({color: 0x000000});
-		phongMaterial = new THREE.MeshPhongMaterial({color: 0x000000});
+		var diffuseColor = new THREE.Color(0.0,0.0,0.0);
+		var specularColor = new THREE.Color(0.34,0.15,0.13);
+		phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+		lambertMaterial = new THREE.MeshLambertMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
 		geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
 		mesh = new THREE.Mesh(geometry, lambertMaterial);
 		mesh.position.set(x, y, z);
@@ -52,11 +54,14 @@ class vehicle {
 	/ addLight
 	/
 	/ Funcao que cria as luzes do carro, juntando o material e a geometria ao mesh do carro (esfera), na posicao xyz
-	*/
+	*//* comment the material*/
 	addLight(x, y, z){
 		'use strict';
-		lambertMaterial = new THREE.MeshLambertMaterial({color: 0xFFFF00});
-		phongMaterial = new THREE.MeshPhongMaterial({color: 0xFFFF00});
+		
+		var diffuseColor = new THREE.Color(1.0,0.81,0.0);
+		var specularColor = new THREE.Color(0.7,0.52,0.41);
+		phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+		lambertMaterial = new THREE.MeshLambertMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
 		geometry = new THREE.SphereGeometry(0.5,32,32);
 		mesh = new THREE.Mesh(geometry, lambertMaterial);
 
@@ -71,7 +76,8 @@ class vehicle {
 	*/
 	addCar(x, y, z) {
 		'use strict';
-		geometry = new THREE.CubeGeometry(5, 2.5, 7);
+		
+		geometry = new THREE.CubeGeometry(5, 1.5, 7);
 		mesh = new THREE.Mesh(geometry, lambertMaterial);
 		mesh.position.set(x, y, z);
 		this.obj.add(mesh);
@@ -86,16 +92,17 @@ class vehicle {
 	*/
 	createCar(x, y, z) {
 		'use strict';
-		lambertMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
-		phongMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
+		var diffuseColor = new THREE.Color(1.0,0.0,0.0);
+		var specularColor = new THREE.Color(0.34,0.15,0.13);
+		phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+		lambertMaterial = new THREE.MeshLambertMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
 		this.addCar(x, y, z);
-
 		this.addWheel(x+2.95, y-0.4, z+1.5);
 		this.addWheel(x-2.95, y-0.4, z+1.5);
 		this.addWheel(x+2.95, y-0.4, z-1.5);
 		this.addWheel(x-2.95, y-0.4, z-1.5);
-		this.addLight(x-1.5, y+1.5, z-2.5);
-		this.addLight(x+1.5, y+1.5, z-2.5);
+		this.addLight(x-1.5, y+1, z-2.5);
+		this.addLight(x+1.5, y+1, z-2.5);
 
 		scene.add(this.obj);
 
