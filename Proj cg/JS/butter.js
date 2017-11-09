@@ -1,10 +1,10 @@
 /*
 / Construtor da manteiga
-/ 
-*/	
+/
+*/
 
 class butter {
-	
+
 	constructor() {
 		this.obj = new THREE.Object3D();
 		this.BSphere;
@@ -12,8 +12,8 @@ class butter {
 
 	/*
 	/ Funcao change position, para alterar a posicao da manteiga
-	*/	
-	changePosition(x, y, z) {	
+	*/
+	changePosition(x, y, z) {
 		'use strict';
 		this.obj.position.set(x, y, z);
 	}
@@ -21,15 +21,12 @@ class butter {
 
 	createButter(x, y, z) {
 		'use strict';
-
-		material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+		lambertMaterial = new THREE.MeshLambertMaterial({color: 0xffff00});
+		phongMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
 		geometry = new THREE.CubeGeometry(3, 1.5, 6);
-
-		mesh = new THREE.Mesh(geometry, material);
-
+		mesh = new THREE.Mesh(geometry, lambertMaterial);
 		this.obj.add(mesh);
 		this.obj.position.set(x, y, z);
-
 		scene.add(this.obj);
 	}
 

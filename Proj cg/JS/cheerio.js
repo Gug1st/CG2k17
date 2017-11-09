@@ -25,10 +25,10 @@ class cheerio{
 
 	createCheerio(x, y, z) {
 		'use strict';
-
-		material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+		lambertMaterial = new THREE.MeshLambertMaterial({color: 0x000000});
+		phongMaterial = new THREE.MeshPhongMaterial({color: 0x000000});
 		geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
-		mesh = new THREE.Mesh(geometry, material);
+		mesh = new THREE.Mesh(geometry, lambertMaterial);
 
 		this.obj.add(mesh);
 		this.obj.position.set(x, y, z);

@@ -16,17 +16,19 @@ class orange{
 
 	addOrange(){
 		'use strict';
-		material = new THREE.MeshBasicMaterial({color: 0xffa500 });
 		geometry = new THREE.SphereGeometry(1, 10, 10);
-		mesh = new THREE.Mesh(geometry, material);
+		lambertMaterial = new THREE.MeshLambertMaterial({color: 0xffa500 });
+    phongMaterial = new THREE.MeshPhongMaterial({color: 0xffa500 });
+		mesh = new THREE.Mesh(geometry, lambertMaterial);
 		this.obj.add(mesh);
 	}
 
 	addCaule(){
 		'use strict';
 		geometry = new THREE.CylinderGeometry( 0.1, 0.1, 1, 8, 1);
-		material = new THREE.MeshBasicMaterial( {color: 0x006400} );
-		mesh = new THREE.Mesh( geometry, material );
+		lambertMaterial = new THREE.MeshLambertMaterial({color: 0x006400});
+		phongMaterial = new THREE.MeshPhongMaterial({color: 0x006400});
+		mesh = new THREE.Mesh( geometry, lambertMaterial);
 		mesh.position.set(0, 1, 0);
 		this.obj.add(mesh);
 	}
@@ -34,8 +36,9 @@ class orange{
 	addFolha(){
 		'use strict';
 		geometry = new THREE.CircleGeometry( 1, 2, 2, 1 );
-		material = new THREE.MeshBasicMaterial( { color: 0x006400 } );
-		mesh = new THREE.Mesh( geometry,material );
+		lambertMaterial = new THREE.MeshLambertMaterial({color: 0x006400});
+		phongMaterial = new THREE.MeshPhongMaterial({color: 0x006400});
+		mesh = new THREE.Mesh( geometry, lambertMaterial);
 		mesh.position.set(0, 1, 0);
 		mesh.rotateX(1.2);
 		this.obj.add(mesh);

@@ -4,7 +4,7 @@ var NUM_BUTTERS = 8;
 var cameraOrthographic, cameraPerspective, cameraDriver, scene, renderer;
 
 var car, ring;
-var geometry, material, mesh;
+var geometry, material, lambertMaterial, phongMaterial, mesh;
 
 var aspect = window.innerWidth / window.innerHeight;
 
@@ -20,8 +20,6 @@ var mapCheerios = [];
 
 var frustumSize = 1000; cameraFactor = 10;
 var lastPressed, lastCamera;
-
-var directionalLight;
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive)
@@ -172,12 +170,8 @@ function createScene() {
 	car.createCar(0, 0, 0);
 	car.changePosition(61, 1, 37);
 	car.vehicleBoundingSphere();
-	// add sun light
-	directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-	directionalLight.position.set(0,15,0);
-	directionalLight.target.position.set(0,0,0);
-	scene.add(directionalLight);
-
+  addPointlights();
+  addDirectionalLight();
 	// Driver Camera (Chase Camera behind car View) - PerspectiveCamera( fov, aspect, near, far )
 	addOranges(NUM_ORANGES);
 	addButters(NUM_BUTTERS);
@@ -481,14 +475,23 @@ function onKeyDown(e) {
 		lastCamera=3;
 		break;
 
+  case 67: // C - Toggle 6 Pointligths
+  	togglePointlights(); // Turns on/off the 6 pointlights
+  	break;
+
+  case 99: // c
+    togglePointlights(); // Turns on/off the 6 pointlights
+  	break;
+
+
 	// sun light
 	case 78: //N
+    // alternates between night and day
+    toggleDirectionalLight();
+    break;
 	case 110: //n
 		// alternates between night and day
-		if (directionalLight.intensity > 0)
-			directionalLight.intensity = 0;
-		else
-			directionalLight.intensity = 1;
+		toggleDirectionalLight();
 		break;
 	}
 }

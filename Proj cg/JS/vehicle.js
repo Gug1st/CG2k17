@@ -38,10 +38,10 @@ class vehicle {
 	*/
 	addWheel(x, y, z) {
 		'use strict';
-
-		material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+		lambertMaterial = new THREE.MeshLambertMaterial({color: 0x000000});
+		phongMaterial = new THREE.MeshPhongMaterial({color: 0x000000});
 		geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
-		mesh = new THREE.Mesh(geometry, material);
+		mesh = new THREE.Mesh(geometry, lambertMaterial);
 		mesh.position.set(x, y, z);
 		mesh.rotateY(1.5);
 		mesh.rotateX(0);
@@ -55,10 +55,10 @@ class vehicle {
 	*/
 	addLight(x, y, z){
 		'use strict';
-
+		lambertMaterial = new THREE.MeshLambertMaterial({color: 0xFFFF00});
+		phongMaterial = new THREE.MeshPhongMaterial({color: 0xFFFF00});
 		geometry = new THREE.SphereGeometry(0.5,32,32);
-		material = new THREE.MeshBasicMaterial({ color: 0xFFFF00 });
-		mesh = new THREE.Mesh(geometry, material);
+		mesh = new THREE.Mesh(geometry, lambertMaterial);
 
 		mesh.position.set(x, y, z);
 		this.obj.add(mesh);
@@ -71,9 +71,8 @@ class vehicle {
 	*/
 	addCar(x, y, z) {
 		'use strict';
-
 		geometry = new THREE.CubeGeometry(5, 2.5, 7);
-		mesh = new THREE.Mesh(geometry, material);
+		mesh = new THREE.Mesh(geometry, lambertMaterial);
 		mesh.position.set(x, y, z);
 		this.obj.add(mesh);
 	}
@@ -87,9 +86,8 @@ class vehicle {
 	*/
 	createCar(x, y, z) {
 		'use strict';
-
-		material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-
+		lambertMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
+		phongMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
 		this.addCar(x, y, z);
 
 		this.addWheel(x+2.95, y-0.4, z+1.5);
