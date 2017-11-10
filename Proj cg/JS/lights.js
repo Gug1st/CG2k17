@@ -56,22 +56,20 @@ function toggleDirectionalLight(){
 
 function togglePointlights(){
   // Turns Light ON and OFF
-  if (pointLight_state == 1){
-    pointlight1.intensity = 0;
-    pointlight2.intensity = 0;
-    pointlight3.intensity = 0;
-    pointlight4.intensity = 0;
-    pointlight5.intensity = 0;
-    pointlight6.intensity = 0;
-    pointLight_state = 0;
-    }
-  else if (pointLight_state == 0) {
-    pointlight1.intensity = 3;
-    pointlight2.intensity = 3;
-    pointlight3.intensity = 3;
-    pointlight4.intensity = 3;
-    pointlight5.intensity = 3;
-    pointlight6.intensity = 3;
-    pointLight_state = 1;
-  }
+  var i;
+  for (i=0; i<pointlights.length; i ++){
+  	
+  		if (pointLight_state == 1){
+  			pointlights[i].intensity = 0;
+  		} 
+   		else {
+   			pointlights[i].intensity = 1;
+   		}
+   }
+
+   if (pointLight_state == 1)
+   	pointLight_state = 0;
+   else
+   	pointLight_state = 1;
+
 }

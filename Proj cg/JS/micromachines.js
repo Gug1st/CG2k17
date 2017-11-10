@@ -483,14 +483,12 @@ function onKeyDown(e) {
 		break;
 
   case 67: // C - Toggle 6 Pointligths
+  case 99: // c
   	togglePointlights(); // Turns on/off the 6 pointlights
   	break;
 
-  case 99: // c
-    togglePointlights(); // Turns on/off the 6 pointlights
-  	break;
-
   case 71: //G
+  case 67: // g
       // alternates between Goroud and Phong
       toggleButterMaterials();
       toggleOrangeMaterials();
@@ -499,12 +497,9 @@ function onKeyDown(e) {
 
 	// sun light
 	case 78: //N
-    // alternates between night and day
-    toggleDirectionalLight();
-    break;
 	case 110: //n
-		// alternates between night and day
-		toggleDirectionalLight();
+    	// alternates between night and day
+    	toggleDirectionalLight();
 		break;
 	}
 }
