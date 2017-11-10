@@ -386,7 +386,6 @@ function checkCollisions(){
 
 function render() {
 	'use strict';
-  renderer.shadowMap.enabled = true;
 	if (lastCamera == 1) {
 		renderer.render(scene, cameraOrthographic);
 	}
