@@ -71,5 +71,4 @@ function togglePointlights(){
    	pointLight_state = 0;
    else
    	pointLight_state = 1;
-
 }
