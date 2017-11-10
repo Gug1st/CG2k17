@@ -18,6 +18,18 @@ class butter {
 		this.obj.position.set(x, y, z);
 	}
 
+	toggleButterMaterials(){
+		for (butter in mapButters) {
+			if (typeMaterial = 0) {
+				this.obj.mesh.material = phongMaterial;
+				typeMaterial = 1;
+				}
+			else {
+				this.obj.mesh.material = lambertMaterial;
+				typeMaterial=0;
+				}
+			}
+	}
 
 	createButter(x, y, z) {
 		'use strict';
@@ -25,6 +37,8 @@ class butter {
 		phongMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
 		geometry = new THREE.CubeGeometry(3, 1.5, 6);
 		mesh = new THREE.Mesh(geometry, lambertMaterial);
+		this.obj.castShadow = true;
+		this.obj.receiveShadow = true;
 		this.obj.add(mesh);
 		this.obj.position.set(x, y, z);
 		scene.add(this.obj);

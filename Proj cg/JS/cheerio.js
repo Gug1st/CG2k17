@@ -25,11 +25,18 @@ class cheerio{
 
 	createCheerio(x, y, z) {
 		'use strict';
-		lambertMaterial = new THREE.MeshLambertMaterial({color: 0x000000});
-		phongMaterial = new THREE.MeshPhongMaterial({color: 0x000000});
+		// add all materials to a multi-material array
+		var mm = [
+				new THREE.MeshLambertMaterial({color: 0x000000}),
+				new THREE.MeshPhongMaterial({color: 0x000000}),
+				new THREE.MeshBasicMaterial({color: 0x000000})
+		];
 		geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
-		mesh = new THREE.Mesh(geometry, lambertMaterial);
-
+		geometry.computeFaceNormals();
+		geometry.computeVertexNormals();
+		mesh = new THREE.Mesh(geometry, mm);
+		this.obj.castShadow = true;
+		this.obj.receiveShadow = true;
 		this.obj.add(mesh);
 		this.obj.position.set(x, y, z);
 		this.obj.rotateX(1.4);
@@ -39,6 +46,20 @@ class cheerio{
 	cheerioBoundingSphere(){
 		this.BSphere = new THREE.Sphere(this.obj.position, 0.8);
 	}
+
+toggleCheerioMaterials(){
+	for (cheerio in mapCheerios) {
+		if (typeMaterial = 0) {
+			this.obj.mesh.material = phongMaterial;
+			typeMaterial = 1;
+			}
+		else {
+			this.obj.mesh.material = lambertMaterial;
+			typeMaterial=0;
+			}
+		}
+}
+
 
 	cheerioMovement() {
 		var yAxis = new THREE.Vector3(0, 1, 0);

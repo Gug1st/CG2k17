@@ -4,7 +4,7 @@ var NUM_BUTTERS = 8;
 var cameraOrthographic, cameraPerspective, cameraDriver, scene, renderer;
 
 var car, ring;
-var geometry, material, lambertMaterial, phongMaterial, mesh;
+var geometry, material, lambertMaterial, phongMaterial, basicMaterial, mesh;
 
 var aspect = window.innerWidth / window.innerHeight;
 
@@ -20,7 +20,7 @@ var mapCheerios = [];
 
 var frustumSize = 1000; cameraFactor = 10;
 var lastPressed, lastCamera;
-
+var typeMaterial; // 0 - Lambert , 1 - Phong
 /**
  * Returns a random integer between min (inclusive) and max (inclusive)
  * Using Math.round() will give you a non-uniform distribution!
@@ -122,8 +122,6 @@ function addBorders() {
 
 function addTable(obj, x, y, z) {
 	'use strict';
-	geometry = new THREE.CubeGeometry(150, 0, 150);
-	mesh = new THREE.Mesh(geometry, material);
 	mesh.position.set(x, y, z);
 	obj.add(mesh);
 }
@@ -133,9 +131,15 @@ function createTable(x, y, z) {
 	var table = new THREE.Object3D();
 	var diffuseColor = new THREE.Color(0.33,0.72,0.0);
 	var specularColor = new THREE.Color(0.64,0.65,0.43);
+  material = new THREE.MeshBasicMaterial({ color: 0x00cc66 });
 	phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
-	lambertMaterial = new THREE.MeshLambertMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+	lambertMaterial = new THREE.MeshLambertMaterial({ color: 0x00cc66 });
+  geometry = new THREE.CubeGeometry(150, 0, 150);
+	mesh = new THREE.Mesh(geometry, lambertMaterial);
 	addTable(table, x, y, z);
+  geometry.computeFaceNormals();
+  geometry.computeVertexNormals();
+  mesh.receiveShadow = true;
 	scene.add(table);
 	addBorders();
 }
@@ -382,7 +386,7 @@ function checkCollisions(){
 
 function render() {
 	'use strict';
-
+  renderer.shadowMap.enabled = true;
 	if (lastCamera == 1) {
 		renderer.render(scene, cameraOrthographic);
 	}
@@ -486,6 +490,12 @@ function onKeyDown(e) {
     togglePointlights(); // Turns on/off the 6 pointlights
   	break;
 
+  case 71: //G
+      // alternates between Goroud and Phong
+      toggleButterMaterials();
+      toggleOrangeMaterials();
+      toggleCheerioMaterials();
+      break;
 
 	// sun light
 	case 78: //N

@@ -37,18 +37,30 @@ class vehicle {
 	/ Funcao que cria as rodas do carro, juntando o material e a geometria ao mesh do carro (torus), na posicao xyz
 	*/
 	addWheel(x, y, z) {
-		'use strict';
-		var diffuseColor = new THREE.Color(0.0,0.0,0.0);
-		var specularColor = new THREE.Color(0.34,0.15,0.13);
-		phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
-		lambertMaterial = new THREE.MeshLambertMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
-		geometry = new THREE.TorusGeometry(0.8, 0.4, 10, 50);
-		mesh = new THREE.Mesh(geometry, lambertMaterial);
-		mesh.position.set(x, y, z);
-		mesh.rotateY(1.5);
-		mesh.rotateX(0);
-		this.obj.add(mesh);
-	}
+	'use strict';
+	var diffuseColor = new THREE.Color(0.0,0.0,0.0);
+	var specularColor = new THREE.Color(0.34,0.15,0.13);
+	phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+	lambertMaterial = new THREE.MeshLambertMaterial({color: 0x000000});
+	basicMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
+	var vertices = [
+	-0.6,-1,-1,    0.6,-0.1,-1,    0.6, 0.1,-1,    -0.6, 1,-1,
+	-0.6,-1, 1,    0.6,-0.1, 1,    0.6, 0.1, 1,    -0.6, 1, 1,
+	];
+	var faces = [
+	2,1,0,    0,3,2,
+	0,4,7,    7,3,0,
+	0,1,5,    5,4,0,
+	1,2,6,    6,5,1,
+	2,3,7,    7,6,2,
+	4,5,6,    6,7,4
+	];
+	geometry = new THREE.PolyhedronGeometry(vertices, faces, 0.7, 2);
+	mesh = new THREE.Mesh(geometry, lambertMaterial);
+	mesh.position.set(x, y, z);
+	mesh.rotateX(1);
+	this.obj.add(mesh);
+}
 
 	/*
 	/ addLight
@@ -57,12 +69,26 @@ class vehicle {
 	*//* comment the material*/
 	addLight(x, y, z){
 		'use strict';
-		
+
 		var diffuseColor = new THREE.Color(1.0,0.81,0.0);
 		var specularColor = new THREE.Color(0.7,0.52,0.41);
 		phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
-		lambertMaterial = new THREE.MeshLambertMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
-		geometry = new THREE.SphereGeometry(0.5,32,32);
+		lambertMaterial = new THREE.MeshLambertMaterial({color: 0xffff00});
+		basicMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
+		var vertices = [
+    -1,-1,-1,    1,-1,-1,    1, 1,-1,    -1, 1,-1,
+    -1,-1, 1,    1,-1, 1,    1, 1, 1,    -1, 1, 1,
+		];
+		var faces = [
+    2,1,0,    0,3,2,
+    0,4,7,    7,3,0,
+    0,1,5,    5,4,0,
+    1,2,6,    6,5,1,
+    2,3,7,    7,6,2,
+    4,5,6,    6,7,4
+		];
+		geometry = new THREE.PolyhedronGeometry(vertices, faces, 0.5, 2);
+
 		mesh = new THREE.Mesh(geometry, lambertMaterial);
 
 		mesh.position.set(x, y, z);
@@ -76,12 +102,56 @@ class vehicle {
 	*/
 	addCar(x, y, z) {
 		'use strict';
-		
-		geometry = new THREE.CubeGeometry(5, 1.5, 7);
+		var diffuseColor = new THREE.Color(1.0,0.0,0.0);
+		var specularColor = new THREE.Color(0.34,0.15,0.13);
+		phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+		lambertMaterial = new THREE.MeshLambertMaterial({color: 0xb20e0e});
+		basicMaterial = new THREE.MeshBasicMaterial({color: 0xb20e0e});
+
+		var vertices = [
+    -1,-0.3,-1.3,    1,-0.3,-1.3,    1, 0.3,-1.3,    -1, 0.3,-1.3,
+    -1,-0.3, 1.3,    1,-0.3, 1.3,    1, 0.3, 1.3,    -1, 0.3, 1.3,
+		];
+		var faces = [
+    2,1,0,    0,3,2,
+    0,4,7,    7,3,0,
+    0,1,5,    5,4,0,
+    1,2,6,    6,5,1,
+    2,3,7,    7,6,2,
+    4,5,6,    6,7,4
+		];
+		geometry = new THREE.PolyhedronGeometry(vertices, faces, 3.5, 0);
 		mesh = new THREE.Mesh(geometry, lambertMaterial);
 		mesh.position.set(x, y, z);
 		this.obj.add(mesh);
 	}
+
+	addUpperCar(x, y, z) {
+	'use strict';
+	var diffuseColor = new THREE.Color(1.0,0.0,0.0);
+	var specularColor = new THREE.Color(0.34,0.15,0.13);
+	phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+	lambertMaterial = new THREE.MeshLambertMaterial({color: 0xb20e0e});
+	basicMaterial = new THREE.MeshBasicMaterial({color: 0xb20e0e});
+	var vertices = [
+	-1,-0.3,-1.3,    1,-0.3,-1.3,    1, 0.3,-1.3,    -1, 0.3,-1.3,
+	-1,-0.3, 1.3,    1,-0.3, 1.3,    1, 0.7, 1.3,    -1, 0.7, 1.3,
+	];
+	var faces = [
+	2,1,0,    0,3,2,
+	0,4,7,    7,3,0,
+	0,1,5,    5,4,0,
+	1,2,6,    6,5,1,
+	2,3,7,    7,6,2,
+	4,5,6,    6,7,4
+	];
+	geometry = new THREE.PolyhedronGeometry(vertices, faces, 2.5, 0);
+
+
+	mesh = new THREE.Mesh(geometry, lambertMaterial);
+	mesh.position.set(x, y, z);
+	this.obj.add(mesh);
+}
 
 	/*
 	/ createCar
@@ -92,20 +162,15 @@ class vehicle {
 	*/
 	createCar(x, y, z) {
 		'use strict';
-		var diffuseColor = new THREE.Color(1.0,0.0,0.0);
-		var specularColor = new THREE.Color(0.34,0.15,0.13);
-		phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
-		lambertMaterial = new THREE.MeshLambertMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
 		this.addCar(x, y, z);
-		this.addWheel(x+2.95, y-0.4, z+1.5);
-		this.addWheel(x-2.95, y-0.4, z+1.5);
-		this.addWheel(x+2.95, y-0.4, z-1.5);
-		this.addWheel(x-2.95, y-0.4, z-1.5);
-		this.addLight(x-1.5, y+1, z-2.5);
-		this.addLight(x+1.5, y+1, z-2.5);
-
+		this.addUpperCar(x, y+1, z);
+		this.addWheel(x+2.55, y-0.5, z+1.5);
+		this.addWheel(x-2.55, y-0.5, z+1.5);
+		this.addWheel(x+2.55, y-0.5, z-1.5);
+		this.addWheel(x-2.55, y-0.5, z-1.5);
+		this.addLight(x-1.5, y+0.8, z-2.5);
+		this.addLight(x+1.5, y+0.8, z-2.5);
 		scene.add(this.obj);
-
 	}
 
 	vehicleBoundingSphere() {
