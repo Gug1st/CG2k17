@@ -36,8 +36,8 @@ function addDirectionalLight(){
   directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(0,1,0);
   directionalLight.castShadow = true;
-  directionalLight.shadow.camera.near = 0.5;
-  directionalLight.shadow.camera.far = 50;
+  directionalLight.shadow.camera.near = 1;
+  directionalLight.shadow.camera.far = 500;
   scene.add(directionalLight);
   directionalLight_state = 1;
 }

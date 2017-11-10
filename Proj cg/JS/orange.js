@@ -97,6 +97,15 @@ class orange{
 	}
 }
 
+toggleOrangeIllumination(){
+	for (orange in mapOranges) {
+		if(typeMaterial == 0){
+			mesh.material = basicMaterial;
+			typeMaterial = 2;
+		}
+	}
+}
+
 	orangeBoundingSphere() {
 		this.BSphere = new THREE.Sphere(this.obj.position, 1);
 		//this.obj.children[0].geometry.computeBoundingSphere();

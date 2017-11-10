@@ -31,6 +31,15 @@ class butter {
 			}
 	}
 
+	toggleButterIllumination(){
+		for (butter in mapButters) {
+			if(typeMaterial == 0){
+				mesh.material = basicMaterial;
+				typeMaterial = 2;
+			}
+		}
+	}
+
 	createButter(x, y, z) {
 		'use strict';
 		lambertMaterial = new THREE.MeshLambertMaterial({color: 0xffff00});
