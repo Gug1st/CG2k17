@@ -496,6 +496,12 @@ function onKeyDown(e) {
       break;
 
 	// sun light
+  case 76: //L
+    // Turns illumination on/off
+    toggleOrangeIllumination();
+    toggleCheerioIllumination();
+    toggleButterIllumination()
+    break;
 	case 78: //N
 	case 110: //n
     	// alternates between night and day

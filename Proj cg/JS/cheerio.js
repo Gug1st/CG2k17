@@ -60,6 +60,15 @@ toggleCheerioMaterials(){
 		}
 }
 
+toggleCheerioIllumination(){
+	for (cheerio in mapCheerios) {
+		if(typeMaterial == 0){
+			mesh.material = basicMaterial;
+			typeMaterial = 2;
+		}
+	}
+}
+
 
 	cheerioMovement() {
 		var yAxis = new THREE.Vector3(0, 1, 0);
