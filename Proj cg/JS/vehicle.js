@@ -40,7 +40,7 @@ class vehicle {
 	'use strict';
 	var diffuseColor = new THREE.Color(0.0,0.0,0.0);
 	var specularColor = new THREE.Color(0.34,0.15,0.13);
-	phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+	phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 200});
 	lambertMaterial = new THREE.MeshLambertMaterial({color: 0x000000});
 	basicMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
 	var vertices = [

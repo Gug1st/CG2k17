@@ -8,6 +8,9 @@ var geometry, material, lambertMaterial, phongMaterial, basicMaterial, mesh;
 
 var aspect = window.innerWidth / window.innerHeight;
 
+var continueAnimating = true;
+var id;
+
 var clock, delta;
 var timer = 0;
 var timerChanger = 0;
@@ -128,18 +131,50 @@ function addTable(obj, x, y, z) {
 
 function createTable(x, y, z) {
 	'use strict';
+
 	var table = new THREE.Object3D();
+
 	var diffuseColor = new THREE.Color(0.33,0.72,0.0);
 	var specularColor = new THREE.Color(0.64,0.65,0.43);
-  material = new THREE.MeshBasicMaterial({ color: 0x00cc66 });
-	phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
-	lambertMaterial = new THREE.MeshLambertMaterial({ color: 0x00cc66 });
-  geometry = new THREE.CubeGeometry(150, 0, 150);
-	mesh = new THREE.Mesh(geometry, lambertMaterial);
+
+	// instantiate a loader
+	var loader = new THREE.TextureLoader();
+
+	// load a resource
+	loader.load(
+		// resource URL
+		'https://st.depositphotos.com/1780362/2555/v/950/depositphotos_25556957-stock-illustration-tablecloth-pattern.jpg',
+		// Function when resource is loaded
+		function ( texture ) {
+			// in this example we create the material when the texture is loaded
+			material = new THREE.MeshBasicMaterial( {
+				map: texture
+			 } );
+		},
+		// Function called when download progresses
+		function ( xhr ) {
+			console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+		},
+		// Function called when download errors
+		function ( xhr ) {
+			console.error( 'An error happened' );
+		}
+	);
+
+	//var texture = THREE.ImageUtils.loadTexture('/textures/toalha.jpg');
+
+	//material = new THREE.MeshBasicMaterial({ side: THREE.FrontSide, map: texture });
+  	//material = new THREE.MeshBasicMaterial({ color: 0x00cc66 });
+	//phongMaterial = new THREE.MeshPhongMaterial({color: diffuseColor, specular: specularColor, shininess: 2});
+	//lambertMaterial = new THREE.MeshLambertMaterial({ color: 0x00cc66 });
+	//lambertMaterial = new THREE.MeshLambertMaterial({ map: texture });
+
+  	geometry = new THREE.CubeGeometry(150, 0, 150);
+	mesh = new THREE.Mesh(geometry, material);
 	addTable(table, x, y, z);
-  geometry.computeFaceNormals();
-  geometry.computeVertexNormals();
-  mesh.receiveShadow = true;
+  	geometry.computeFaceNormals();
+  	geometry.computeVertexNormals();
+  	mesh.receiveShadow = true;
 	scene.add(table);
 	addBorders();
 }
@@ -177,8 +212,8 @@ function createScene() {
 	car.createCar(0, 0, 0);
 	car.changePosition(61, 1, 37);
 	car.vehicleBoundingSphere();
-  addPointlights();
-  addDirectionalLight();
+  	addPointlights();
+  	addDirectionalLight();
 	// Driver Camera (Chase Camera behind car View) - PerspectiveCamera( fov, aspect, near, far )
 	addOranges(NUM_ORANGES);
 	addButters(NUM_BUTTERS);
@@ -414,7 +449,8 @@ function animate() {
 	checkTableBounderings();
 
 	render();
-	requestAnimationFrame(animate);
+	if (continueAnimating) 
+		requestAnimationFrame(animate);
 
 }
 
@@ -481,30 +517,35 @@ function onKeyDown(e) {
 		lastCamera=3;
 		break;
 
-  case 67: // C - Toggle 6 Pointligths
-  case 99: // c
-  	togglePointlights(); // Turns on/off the 6 pointlights
-  	break;
+	case 83: // S - stop animate
+	case 115: // s - stop animate
+		continueAnimating = !continueAnimating;
+		animate();
 
-  case 71: //G
-  case 67: // g
-      // alternates between Goroud and Phong
-      toggleButterMaterials();
-      toggleOrangeMaterials();
-      toggleCheerioMaterials();
-      break;
+	case 67: // C - Toggle 6 Pointligths
+	case 99: // c
+	  	togglePointlights(); // Turns on/off the 6 pointlights
+	  	break;
 
-	// sun light
-  case 76: //L
-    // Turns illumination on/off
-    toggleOrangeIllumination();
-    toggleCheerioIllumination();
-    toggleButterIllumination()
-    break;
+	case 71: //G
+	case 67: // g
+	    // alternates between Goroud and Phong
+	    toggleButterMaterials();
+	    toggleOrangeMaterials();
+	    toggleCheerioMaterials();
+	    break;
+
+		// sun light
+	case 76: //L
+	    // Turns illumination on/off
+	    toggleOrangeIllumination();
+	    toggleCheerioIllumination();
+	    toggleButterIllumination()
+	    break;
 	case 78: //N
 	case 110: //n
-    	// alternates between night and day
-    	toggleDirectionalLight();
+	    // alternates between night and day
+	    toggleDirectionalLight();
 		break;
 	}
 }

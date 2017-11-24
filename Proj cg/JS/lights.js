@@ -26,7 +26,7 @@ function addPointlights(){
   for (var i in pointlights) {
     pointlights[i].castShadow = true;
     scene.add(pointlights[i]);
-    // scene.add(new THREE.PointLightHelper(pointlights[i], 3)); To visualize lights location
+    scene.add(new THREE.PointLightHelper(pointlights[i], 3)); //To visualize lights location
   }
   pointLight_state =1;
 }
